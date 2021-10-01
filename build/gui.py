@@ -4,6 +4,7 @@
 
 
 from pathlib import Path
+import numpy as np
 
 # from tkinter import *
 # Explicit imports to satisfy Flake8
@@ -17,9 +18,8 @@ ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-
 window = Tk()
-
+"""Define el tamaño de la ventana"""
 window.geometry("770x562")
 window.configure(bg = "#FFFFFF")
 
@@ -33,7 +33,8 @@ canvas = Canvas(
     highlightthickness = 0,
     relief = "ridge"
 )
-
+ 
+"""Rectángulo detrás del tablero"""
 canvas.place(x = 0, y = 0)
 canvas.create_rectangle(
     172.13052368164062,
@@ -43,13 +44,14 @@ canvas.create_rectangle(
     fill="#C4C4C4",
     outline="")
 
+"""Botón para recrear una jugada"""
 button_image_1 = PhotoImage(
-    file=relative_to_assets("button_1.png"))
+    file=relative_to_assets("recrear_jugada.png"))
 button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
+    command=lambda: print("Recrear jugada"),
     relief="flat"
 )
 button_1.place(
@@ -59,13 +61,14 @@ button_1.place(
     height=29.888092041015625
 )
 
+"""Botón para guardar el historial de tiradas de la partida"""
 button_image_2 = PhotoImage(
-    file=relative_to_assets("button_2.png"))
+    file=relative_to_assets("guardar_historial.png"))
 button_2 = Button(
     image=button_image_2,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_2 clicked"),
+    command=lambda: print("Guardar historial"),
     relief="flat"
 )
 button_2.place(
@@ -75,13 +78,14 @@ button_2.place(
     height=25.540735244750977
 )
 
+"""Botón que limpia el tablero"""
 button_image_3 = PhotoImage(
-    file=relative_to_assets("button_3.png"))
+    file=relative_to_assets("limpiar.png"))
 button_3 = Button(
     image=button_image_3,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_3 clicked"),
+    command=lambda: print("Limpiar"),
     relief="flat"
 )
 button_3.place(
@@ -91,13 +95,14 @@ button_3.place(
     height=29.888092041015625
 )
 
+"""Botón que guarda la jugada en pdf"""
 button_image_4 = PhotoImage(
-    file=relative_to_assets("button_4.png"))
+    file=relative_to_assets("guardar_jugada.png"))
 button_4 = Button(
     image=button_image_4,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_4 clicked"),
+    command=lambda: print("Jugada guardada"),
     relief="flat"
 )
 button_4.place(
@@ -107,13 +112,14 @@ button_4.place(
     height=29.888092041015625
 )
 
+"""Botón que inicia una partida"""
 button_image_5 = PhotoImage(
-    file=relative_to_assets("button_5.png"))
+    file=relative_to_assets("jugar.png"))
 button_5 = Button(
     image=button_image_5,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_5 clicked"),
+    command=lambda: print("partida iniciada"),
     relief="flat"
 )
 button_5.place(
@@ -123,13 +129,14 @@ button_5.place(
     height=29.888092041015625
 )
 
+"""Botón que invierte la vista del tablero"""
 button_image_6 = PhotoImage(
-    file=relative_to_assets("button_6.png"))
+    file=relative_to_assets("rotar.png"))
 button_6 = Button(
     image=button_image_6,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_6 clicked"),
+    command=lambda: print("Tablero invertido"),
     relief="flat"
 )
 button_6.place(
@@ -139,13 +146,14 @@ button_6.place(
     height=29.88809585571289
 )
 
+"""Botón para agregar un alfil (negro)"""
 button_image_7 = PhotoImage(
-    file=relative_to_assets("button_7.png"))
+    file=relative_to_assets("image_64.png"))
 button_7 = Button(
     image=button_image_7,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_7 clicked"),
+    command=lambda: print("Alfil N"),
     relief="flat"
 )
 button_7.place(
@@ -155,13 +163,14 @@ button_7.place(
     height=43.0
 )
 
+"""Botón para agregar una torre (negro)"""
 button_image_8 = PhotoImage(
-    file=relative_to_assets("button_8.png"))
+    file=relative_to_assets("image_37.png"))
 button_8 = Button(
     image=button_image_8,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_8 clicked"),
+    command=lambda: print("Torre N"),
     relief="flat"
 )
 button_8.place(
@@ -171,13 +180,14 @@ button_8.place(
     height=43.0
 )
 
+"""Botón para agregar un rey (negro)"""
 button_image_9 = PhotoImage(
-    file=relative_to_assets("button_9.png"))
+    file=relative_to_assets("image_40.png"))
 button_9 = Button(
     image=button_image_9,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_9 clicked"),
+    command=lambda: print("Rey N"),
     relief="flat"
 )
 button_9.place(
@@ -187,13 +197,14 @@ button_9.place(
     height=43.0
 )
 
+"""Botón para agregar un peón (negro)"""
 button_image_10 = PhotoImage(
-    file=relative_to_assets("button_10.png"))
+    file=relative_to_assets("image_44.png"))
 button_10 = Button(
     image=button_image_10,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_10 clicked"),
+    command=lambda: print("Peón N"),
     relief="flat"
 )
 button_10.place(
@@ -203,13 +214,14 @@ button_10.place(
     height=43.0
 )
 
+"""Botón para agregar una reina (negro)"""
 button_image_11 = PhotoImage(
     file=relative_to_assets("button_11.png"))
 button_11 = Button(
     image=button_image_11,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_11 clicked"),
+    command=lambda: print("Reina N"),
     relief="flat"
 )
 button_11.place(
@@ -219,13 +231,14 @@ button_11.place(
     height=43.0
 )
 
+"""Botón para agregar un caballo (negro)"""
 button_image_12 = PhotoImage(
-    file=relative_to_assets("button_12.png"))
+    file=relative_to_assets("image_60.png"))
 button_12 = Button(
     image=button_image_12,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_12 clicked"),
+    command=lambda: print("Caballo N"),
     relief="flat"
 )
 button_12.place(
@@ -235,13 +248,22 @@ button_12.place(
     height=43.0
 )
 
+"""Botón para agregar/seleccionar una pieza"""
 button_image_13 = PhotoImage(
     file=relative_to_assets("button_13.png"))
 button_13 = Button(
     image=button_image_13,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_13 clicked"),
+    command=lambda: print("Agregar"),
+    relief="flat"
+)
+
+button_21 = Button(
+    image=button_image_13,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("Agregar"),
     relief="flat"
 )
 button_13.place(
@@ -251,13 +273,21 @@ button_13.place(
     height=50.0
 )
 
+button_21.place(
+    x=184.0,
+    y=475.0,
+    width=50.0,
+    height=50.0
+)
+
+"""Botón para agregar un alfil (blanco)"""
 button_image_14 = PhotoImage(
-    file=relative_to_assets("button_14.png"))
+    file=relative_to_assets("image_66.png"))
 button_14 = Button(
     image=button_image_14,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_14 clicked"),
+    command=lambda: print("Alfil B"),
     relief="flat"
 )
 button_14.place(
@@ -267,15 +297,25 @@ button_14.place(
     height=42.0
 )
 
+"""Botón para borrar/seleccionar una pieza (negras)"""
 button_image_15 = PhotoImage(
     file=relative_to_assets("button_15.png"))
 button_15 = Button(
     image=button_image_15,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_15 clicked"),
+    command=lambda: print("Borrar"),
     relief="flat"
 )
+
+button_22 = Button(
+    image=button_image_15,
+    borderwidth=0,
+    highlightthickness=0,
+    command=lambda: print("Borrar"),
+    relief="flat"
+)
+
 button_15.place(
     x=496.0,
     y=44.0,
@@ -283,13 +323,21 @@ button_15.place(
     height=40.0
 )
 
+button_22.place(
+    x=496.0,
+    y=479.0,
+    width=40.0,
+    height=40.0
+)
+
+"""Botón para agregar una torre (blanco)"""
 button_image_16 = PhotoImage(
-    file=relative_to_assets("button_16.png"))
+    file=relative_to_assets("image_39.png"))
 button_16 = Button(
     image=button_image_16,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_16 clicked"),
+    command=lambda: print("Torre B"),
     relief="flat"
 )
 button_16.place(
@@ -299,13 +347,14 @@ button_16.place(
     height=42.0
 )
 
+"""Botón para agregar un rey (blanco)"""
 button_image_17 = PhotoImage(
     file=relative_to_assets("button_17.png"))
 button_17 = Button(
     image=button_image_17,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_17 clicked"),
+    command=lambda: print("Rey B"),
     relief="flat"
 )
 button_17.place(
@@ -315,13 +364,14 @@ button_17.place(
     height=42.0
 )
 
+"""Botón para agregar una reina (blanco)"""
 button_image_18 = PhotoImage(
-    file=relative_to_assets("button_18.png"))
+    file=relative_to_assets("image_58.png"))
 button_18 = Button(
     image=button_image_18,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_18 clicked"),
+    command=lambda: print("Reina B"),
     relief="flat"
 )
 button_18.place(
@@ -331,13 +381,14 @@ button_18.place(
     height=42.0
 )
 
+"""Botón para agregar una reina (blanco)"""
 button_image_19 = PhotoImage(
-    file=relative_to_assets("button_19.png"))
+    file=relative_to_assets("image_62.png"))
 button_19 = Button(
     image=button_image_19,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_19 clicked"),
+    command=lambda: print("Caballo B"),
     relief="flat"
 )
 button_19.place(
@@ -347,13 +398,14 @@ button_19.place(
     height=42.0
 )
 
+"""Botón para agregar un peón (blanco)"""
 button_image_20 = PhotoImage(
-    file=relative_to_assets("button_20.png"))
+    file=relative_to_assets("image_52.png"))
 button_20 = Button(
     image=button_image_20,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_20 clicked"),
+    command=lambda: print("Peón B"),
     relief="flat"
 )
 button_20.place(
@@ -363,38 +415,7 @@ button_20.place(
     height=42.0
 )
 
-button_image_21 = PhotoImage(
-    file=relative_to_assets("button_21.png"))
-button_21 = Button(
-    image=button_image_21,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_21 clicked"),
-    relief="flat"
-)
-button_21.place(
-    x=184.0,
-    y=475.0,
-    width=50.0,
-    height=50.0
-)
-
-button_image_22 = PhotoImage(
-    file=relative_to_assets("button_22.png"))
-button_22 = Button(
-    image=button_image_22,
-    borderwidth=0,
-    highlightthickness=0,
-    command=lambda: print("button_22 clicked"),
-    relief="flat"
-)
-button_22.place(
-    x=496.0,
-    y=479.0,
-    width=40.0,
-    height=40.0
-)
-
+"""Rectángulo para jugadas (blanco)"""
 canvas.create_rectangle(
     577.0,
     98.0,
@@ -411,6 +432,7 @@ image_1 = canvas.create_image(
     image=image_image_1
 )
 
+"""Rectángulo para jugadas (negras)"""
 image_image_2 = PhotoImage(
     file=relative_to_assets("image_2.png"))
 image_2 = canvas.create_image(
@@ -427,415 +449,46 @@ canvas.create_rectangle(
     fill="#000000",
     outline="")
 
-canvas.create_text(
-    177.0,
-    117.0,
-    anchor="nw",
-    text="8",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
+"""-------- Números y letras del tablero ------------------"""
+letters  = list(map(chr, range(97, 105)))
+for i in range(8):
+    #Letras
+    canvas.create_text(
+        205.0 + (43 * i),
+        453.0,
+        anchor="nw",
+        text= letters[i],
+        fill="#000000",
+        font=("PTSans Bold", 14 * -1)
+    )
+    #Números
+    canvas.create_text(
+        177.0,
+        421.0 - (43 * i),
+        anchor="nw",
+        text=str(i + 1),
+        fill="#000000",
+        font=("PTSans Bold", 14 * -1)
+    )
 
-canvas.create_text(
-    177.0,
-    162.0,
-    anchor="nw",
-    text="7",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
+"""------------------Tablero vacío-----------------"""
+num = 0
+board = np.zeros((8, 8)) # Tablero de ceros
+img_box = [] # Imagen de la casilla
+for y in range(8):
+    for x in range(8):
+        img_box.append(PhotoImage(
+            file=relative_to_assets(str(num * 1)+".png")))
+        board[x][y] = canvas.create_image(
+            212.53106689453125 + 43 * y,
+            127.07342529296875 + 43 * x,
+            image = img_box[x+y]
+        )
+        num = not num
 
-canvas.create_text(
-    177.0,
-    207.0,
-    anchor="nw",
-    text="6",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
+"""------------------Piezas inicio del juego---------------------"""
 
-canvas.create_text(
-    177.0,
-    248.0,
-    anchor="nw",
-    text="5",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    177.0,
-    291.0,
-    anchor="nw",
-    text="4",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    177.0,
-    334.0,
-    anchor="nw",
-    text="3",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    177.0,
-    377.0,
-    anchor="nw",
-    text="2",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    177.0,
-    421.0,
-    anchor="nw",
-    text="1",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    203.0,
-    453.0,
-    anchor="nw",
-    text="a",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    245.0,
-    453.0,
-    anchor="nw",
-    text="b",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    290.0,
-    453.0,
-    anchor="nw",
-    text="c",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    333.0,
-    453.0,
-    anchor="nw",
-    text="d",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    376.0,
-    453.0,
-    anchor="nw",
-    text="e",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    420.0,
-    453.0,
-    anchor="nw",
-    text="f",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    465.0,
-    453.0,
-    anchor="nw",
-    text="g",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-canvas.create_text(
-    508.0,
-    453.0,
-    anchor="nw",
-    text="h",
-    fill="#000000",
-    font=("PTSans Bold", 14 * -1)
-)
-
-image_image_3 = PhotoImage(
-    file=relative_to_assets("image_3.png"))
-image_3 = canvas.create_image(
-    211.77023315429688,
-    343.22772216796875,
-    image=image_image_3
-)
-
-image_image_4 = PhotoImage(
-    file=relative_to_assets("image_4.png"))
-image_4 = canvas.create_image(
-    211.91128540039062,
-    299.9230041503906,
-    image=image_image_4
-)
-
-image_image_5 = PhotoImage(
-    file=relative_to_assets("image_5.png"))
-image_5 = canvas.create_image(
-    212.05404663085938,
-    256.8244323730469,
-    image=image_image_5
-)
-
-image_image_6 = PhotoImage(
-    file=relative_to_assets("image_6.png"))
-image_6 = canvas.create_image(
-    212.19509887695312,
-    213.51971435546875,
-    image=image_image_6
-)
-
-image_image_7 = PhotoImage(
-    file=relative_to_assets("image_7.png"))
-image_7 = canvas.create_image(
-    255.05392456054688,
-    342.99639892578125,
-    image=image_image_7
-)
-
-image_image_8 = PhotoImage(
-    file=relative_to_assets("image_8.png"))
-image_8 = canvas.create_image(
-    255.19668579101562,
-    299.8978271484375,
-    image=image_image_8
-)
-
-image_image_9 = PhotoImage(
-    file=relative_to_assets("image_9.png"))
-image_9 = canvas.create_image(
-    255.33770751953125,
-    256.59307861328125,
-    image=image_image_9
-)
-
-image_image_10 = PhotoImage(
-    file=relative_to_assets("image_10.png"))
-image_10 = canvas.create_image(
-    255.48056030273438,
-    213.49453735351562,
-    image=image_image_10
-)
-
-image_image_11 = PhotoImage(
-    file=relative_to_assets("image_11.png"))
-image_11 = canvas.create_image(
-    298.33746337890625,
-    343.51458740234375,
-    image=image_image_11
-)
-
-image_image_12 = PhotoImage(
-    file=relative_to_assets("image_12.png"))
-image_12 = canvas.create_image(
-    298.4785461425781,
-    300.2098693847656,
-    image=image_image_12
-)
-
-image_image_13 = PhotoImage(
-    file=relative_to_assets("image_13.png"))
-image_13 = canvas.create_image(
-    298.6213073730469,
-    257.111328125,
-    image=image_image_13
-)
-
-image_image_14 = PhotoImage(
-    file=relative_to_assets("image_14.png"))
-image_14 = canvas.create_image(
-    298.7623596191406,
-    213.80654907226562,
-    image=image_image_14
-)
-
-image_image_15 = PhotoImage(
-    file=relative_to_assets("image_15.png"))
-image_15 = canvas.create_image(
-    341.62109375,
-    343.2832336425781,
-    image=image_image_15
-)
-
-image_image_16 = PhotoImage(
-    file=relative_to_assets("image_16.png"))
-image_16 = canvas.create_image(
-    341.7638854980469,
-    300.1846923828125,
-    image=image_image_16
-)
-
-image_image_17 = PhotoImage(
-    file=relative_to_assets("image_17.png"))
-image_17 = canvas.create_image(
-    341.9049377441406,
-    256.8799133300781,
-    image=image_image_17
-)
-
-image_image_18 = PhotoImage(
-    file=relative_to_assets("image_18.png"))
-image_18 = canvas.create_image(
-    342.0477600097656,
-    213.7813720703125,
-    image=image_image_18
-)
-
-image_image_19 = PhotoImage(
-    file=relative_to_assets("image_19.png"))
-image_19 = canvas.create_image(
-    384.90472412109375,
-    343.80145263671875,
-    image=image_image_19
-)
-
-image_image_20 = PhotoImage(
-    file=relative_to_assets("image_20.png"))
-image_20 = canvas.create_image(
-    385.0457458496094,
-    300.4967346191406,
-    image=image_image_20
-)
-
-image_image_21 = PhotoImage(
-    file=relative_to_assets("image_21.png"))
-image_21 = canvas.create_image(
-    385.1885986328125,
-    257.3981628417969,
-    image=image_image_21
-)
-
-image_image_22 = PhotoImage(
-    file=relative_to_assets("image_22.png"))
-image_22 = canvas.create_image(
-    385.32958984375,
-    214.09347534179688,
-    image=image_image_22
-)
-
-image_image_23 = PhotoImage(
-    file=relative_to_assets("image_23.png"))
-image_23 = canvas.create_image(
-    427.9045715332031,
-    429.9734802246094,
-    image=image_image_23
-)
-
-image_image_24 = PhotoImage(
-    file=relative_to_assets("image_24.png"))
-image_24 = canvas.create_image(
-    428.1883544921875,
-    343.57012939453125,
-    image=image_image_24
-)
-
-image_image_25 = PhotoImage(
-    file=relative_to_assets("image_25.png"))
-image_25 = canvas.create_image(
-    428.33123779296875,
-    300.4715270996094,
-    image=image_image_25
-)
-
-image_image_26 = PhotoImage(
-    file=relative_to_assets("image_26.png"))
-image_26 = canvas.create_image(
-    428.4722595214844,
-    257.1668395996094,
-    image=image_image_26
-)
-
-image_image_27 = PhotoImage(
-    file=relative_to_assets("image_27.png"))
-image_27 = canvas.create_image(
-    428.6150817871094,
-    214.0682373046875,
-    image=image_image_27
-)
-
-image_image_28 = PhotoImage(
-    file=relative_to_assets("image_28.png"))
-image_28 = canvas.create_image(
-    471.4719543457031,
-    344.0883483886719,
-    image=image_image_28
-)
-
-image_image_29 = PhotoImage(
-    file=relative_to_assets("image_29.png"))
-image_29 = canvas.create_image(
-    471.61302185058594,
-    300.7836608886719,
-    image=image_image_29
-)
-
-image_image_30 = PhotoImage(
-    file=relative_to_assets("image_30.png"))
-image_30 = canvas.create_image(
-    471.755859375,
-    257.6850891113281,
-    image=image_image_30
-)
-
-image_image_31 = PhotoImage(
-    file=relative_to_assets("image_31.png"))
-image_31 = canvas.create_image(
-    471.89686584472656,
-    214.38034057617188,
-    image=image_image_31
-)
-
-image_image_32 = PhotoImage(
-    file=relative_to_assets("image_32.png"))
-image_32 = canvas.create_image(
-    514.7555694580078,
-    343.85693359375,
-    image=image_image_32
-)
-
-image_image_33 = PhotoImage(
-    file=relative_to_assets("image_33.png"))
-image_33 = canvas.create_image(
-    514.8984069824219,
-    300.7584228515625,
-    image=image_image_33
-)
-
-image_image_34 = PhotoImage(
-    file=relative_to_assets("image_34.png"))
-image_34 = canvas.create_image(
-    515.0394439697266,
-    257.4537048339844,
-    image=image_image_34
-)
-
-image_image_35 = PhotoImage(
-    file=relative_to_assets("image_35.png"))
-image_35 = canvas.create_image(
-    515.1823425292969,
-    214.3551025390625,
-    image=image_image_35
-)
-
-image_image_36 = PhotoImage(
+"""image_image_36 = PhotoImage(
     file=relative_to_assets("image_36.png"))
 image_36 = canvas.create_image(
     515.51806640625,
@@ -1089,7 +742,7 @@ image_67 = canvas.create_image(
     386.12548828125,
     429.75830078125,
     image=image_image_67
-)
+)"""
 
 image_image_68 = PhotoImage(
     file=relative_to_assets("image_68.png"))
@@ -1137,6 +790,7 @@ entry_2.place(
     height=324.0
 )
 
+"""Adornos parte inferior"""
 image_image_69 = PhotoImage(
     file=relative_to_assets("image_69.png"))
 image_69 = canvas.create_image(
@@ -1145,6 +799,7 @@ image_69 = canvas.create_image(
     image=image_image_69
 )
 
+"""Adornos parte superior"""
 image_image_70 = PhotoImage(
     file=relative_to_assets("image_70.png"))
 image_70 = canvas.create_image(
@@ -1152,5 +807,6 @@ image_70 = canvas.create_image(
     552.0,
     image=image_image_70
 )
+
 window.resizable(False, False)
 window.mainloop()
