@@ -68,14 +68,20 @@ class Menu:
 
     def delete_menu(self):
         """Quita las opciones para agregar piezas"""
-        map(lambda x: x.destroy(), self.buttons)
-        map(lambda x: x.destroy(), self.img_buttons)
+        for i in self.buttons:
+            i.destroy()
         self.buttons= [] 
         self.img_buttons= []
-        #Falta buscar como ocultar/eliminar los botones
-        #Falta crear el Pdf
-        #Falta cambiar la varible de seleccionar o borrar
 
+        #Falta crear el Pdf
+
+
+    def switch_var(self, val):
+        """Función auxiliar para indicar si una pieza 
+           debe ponerse o quitarse"""
+        self.is_select = val
+        if not self.is_select:
+            self.do_click(0)
 
     def set_menu(self):
         """Muestra un menú para la fichas blancas y 
@@ -85,37 +91,24 @@ class Menu:
         self.set_pieces(43.0, "N") #Piezas negras
         self.set_pieces(479.0, "B") #Piezas blancas
 
-        #Botón para agregar/seleccionar una pieza
-        self.buttons.append(Button(
-            image=self.select_piece,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: exec('self.is_select = True'),
-            relief="flat"
-        ))
+        aux = False
+        for i in range(2):
+            #Botón para agregar/borrar una pieza
+            aux = not aux
+            self.buttons.append(Button(
+                image=self.select_piece if i == 0 else self.delete_piece,
+                borderwidth=0,
+                highlightthickness=0,
+                command=lambda x = aux: self.switch_var(x),
+                relief="flat"
+            ))
 
-        self.buttons[12].place(
-            x=580.0,
-            y=43.0,
-            width=50.0,
-            height=50.0
-        )
-
-        #Botón para borrar/seleccionar una pieza (negras)
-        self.buttons.append(Button(
-            image=self.delete_piece,
-            borderwidth=0,
-            highlightthickness=0,
-            command=lambda: exec('self.is_select = False'),
-            relief="flat"
-        ))
-
-        self.buttons[13].place(
-            x=635.0,
-            y=45,
-            width=40.0,
-            height=40.0
-        )
+            self.buttons[12 + i].place(
+                x=580.0 + (i * 55),
+                y=43.0 + (i*2),
+                width=50.0 - (i*10),
+                height=50.0 - (i*10)
+            )
 
         #Botón para cerrar el menú
         self.buttons.append(Button(

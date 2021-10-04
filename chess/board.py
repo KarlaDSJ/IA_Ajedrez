@@ -124,5 +124,6 @@ class Board():
 
     def set_initial_board(self):
         """Piezas inicio del juego"""
+        self.set_empty_board()
         self.set_fila(0,1*8,"N")
         self.set_fila(7*8,6*8,"B")
