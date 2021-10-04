@@ -67,3 +67,10 @@ class Box():
         self.color = color
         self.set_image()
         self.canvas_box.configure(image=self.img_box)
+    
+    def get_name(self) -> str:
+        """Nos regresa la información de la casilla:
+           > Color de fondo
+           > Color de la pieza
+           > Inicial de la pieza"""
+        return self.name+self.color+str(self.back)
