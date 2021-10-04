@@ -3,6 +3,8 @@ Profesor - Manuel Cristóbal López Michelone
 
 ### Instalación 
 ```
+git clone https://github.com/KarlaDSJ/IA_Ajedrez.git
+cd IA_Ajedrez
 pip3 install -r requirements.txt
 ```
 
