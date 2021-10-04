@@ -1,4 +1,6 @@
 from .box import Box
+from config import relative_to_assets
+from fpdf import FPDF
 
 class Board():
     """
@@ -18,6 +20,29 @@ class Board():
         #Para el historial de las piezas del tablero
         self.white_pieces = []
         self.black_pieces = []
+
+        self.pdf = FPDF(format='Letter')
+        self.piece = "" #Pieza que será puesta en el tablero
+
+    def set_piece(self, piece):
+        """
+            Guarda una pieza seleccionada para ser puesta/movida
+            en el tablero
+
+            piece - nombre y pieza
+        """
+        self.piece = piece
+
+    def put_piece(self, id):
+        """
+            Modifica una casilla para poner o quitar una pieza
+
+            id - número de la pieza
+        """
+        if self.piece != "":
+            self.board[id].set_piece(self.piece[0], self.piece[1])
+        else:   
+            self.board[id].set_piece("", "")
 
     def set_board_num(self):
         """Agrega los números de las coordenadas del tablero"""
@@ -52,7 +77,7 @@ class Board():
             for y in range(8):
                 if len(self.board) < 64:
                     #Si el tablero ya contiene todas las casillas
-                    box = Box(self.canvas, x, y, num * 1)
+                    box = Box(self.canvas, x, y, num * 1, self.put_piece)
                     box.set_image()
                     box.show_on_screen()
                     self.board.append(box)
@@ -67,6 +92,15 @@ class Board():
 
     def save(self):
         print("Tabero guardado")
+        #font = relative_to_assets("fonts/MARRFONT.TTF")
+        tablero = "!""""""""#\n$tMvWlVmT%$OoOoOoOo%\n$ + + + +%\n$+ + + + %\n$ + + + +%\n$+ + + + %\n$pPpPpPpP%\n$RnBqKbNr%\n/(((((((()"
+        #self.pdf.add_font('Ajedrez', '',font, uni=True)
+        self.pdf.add_page()
+        self.pdf.set_xy(0.0,0.0)
+        self.pdf.set_font('Arial', 'B', 16)
+        self.pdf.set_text_color(220, 50, 50)
+        self.pdf.cell(w=210.0, h=40.0, align='C', txt=tablero, border=0)
+        self.pdf.output('chess.pdf','F')
     
     def save_play_history(self):
         print("historial de tiradas")

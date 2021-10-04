@@ -1,5 +1,5 @@
 from config import relative_to_assets
-from tkinter import PhotoImage
+from tkinter import PhotoImage, Button
 
 class Box():
     """
@@ -17,7 +17,7 @@ class Box():
         C - Caballo
         p - Peón 
     """
-    def __init__(self, canvas, x, y, back) -> None:
+    def __init__(self, canvas, x, y, back, on_clik) -> None:
         self.canvas = canvas
         self.canvas_box = 0 #componente dentro del canvas
         self.img_box = 0 # Imagen de la casilla
@@ -29,6 +29,8 @@ class Box():
         self.color = ""  # B - blanco, N - negro(color)
         #Color
         self.back = back # 0 - blanco, 1 - negro (fondo)
+        #función a realizar al dar click en la casilla
+        self.on_click = on_clik 
 
     def set_image(self):
         """ 
@@ -41,11 +43,19 @@ class Box():
 
     def show_on_screen(self):
         """ Muestra en pantalla la casilla """
-        self.canvas_box =  self.canvas.create_image(
-                                212.53106689453125 + 43 * self.y,
-                                127.07342529296875 + 43 * self.x,
-                                image = self.img_box
+        self.canvas_box =  Button(
+                                image=self.img_box,
+                                borderwidth=0,
+                                highlightthickness=0,
+                                command= lambda id = (8*self.x)+self.y: self.on_click(id),
+                                relief="flat"
                             )
+        self.canvas_box.place(
+            x=192.0 + (43 * self.y),
+            y=105.0 + (43 * self.x),
+            width=43.0,
+            height=43.0
+        )
 
     def set_piece(self, name, color):
         """
@@ -56,4 +66,4 @@ class Box():
         self.name = name
         self.color = color
         self.set_image()
-        self.canvas.itemconfig(self.canvas_box,image=self.img_box)
+        self.canvas_box.configure(image=self.img_box)
