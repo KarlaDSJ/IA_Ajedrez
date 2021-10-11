@@ -41,6 +41,7 @@ class InterfaceChess(Interface):
         self.play_history[1][2].destroy()
         self.play_history = [[],[]] 
         self.board.clean()
+        self.pieces_menu.clean()
         self.set_home()
 
     def set_board(self):

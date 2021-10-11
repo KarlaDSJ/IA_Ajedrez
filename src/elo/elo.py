@@ -76,8 +76,10 @@ class Elo:
     def calculate_performance(self) -> int:
         """Regresa el rendimiento de un jugador sin tomar 
         en cuenta el valor de k"""
-        factor = (self.games - self.results) / self.games
-        performance = len(self.players_rating) + 400 * factor 
+        d = (self.games - self.results)
+        d = self.results - d 
+        total_rating = sum(self.players_rating)
+        performance = (total_rating + 400 * d) / self.games
         return float("{:.2f}".format(performance))
 
    
