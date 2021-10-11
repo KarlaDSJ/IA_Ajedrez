@@ -19,13 +19,13 @@ class Menu:
         self.img_buttons= [] #Imágenes de los botones
         #Img para seleccionar una pieza
         self.select_piece =PhotoImage(
-            file=relative_to_assets("images/seleccionar.png"))
+            file=relative_to_assets("images/chess/seleccionar.png"))
         #Img para borrar una pieza
         self.delete_piece  =PhotoImage(
-            file=relative_to_assets("images/borrar.png"))
+            file=relative_to_assets("images/chess/borrar.png"))
         #Img para cerrar el menú
         self.close  =PhotoImage(
-            file=relative_to_assets("images/close.png"))
+            file=relative_to_assets("images/chess/close.png"))
 
     def do_click(self, id):
         """
@@ -51,7 +51,7 @@ class Menu:
         for i in range(6):
             name = self.pieces[i] + color
             self.img_buttons.append(PhotoImage(
-                file=relative_to_assets("images/" + name + "0.png")))
+                file=relative_to_assets("images/chess/" + name + "0.png")))
             self.buttons.append(Button(
                 image=self.img_buttons[p+i],
                 borderwidth=0,
@@ -72,9 +72,6 @@ class Menu:
             i.destroy()
         self.buttons= [] 
         self.img_buttons= []
-
-        #Falta crear el Pdf
-
 
     def switch_var(self, val):
         """Función auxiliar para indicar si una pieza 

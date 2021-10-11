@@ -27,7 +27,7 @@ class Interface():
         self.play_history = [[],[]] 
         #Recuadro para historial de jugadas
         self.rec_history =PhotoImage(
-            file=relative_to_assets("images/historial.png"))
+            file=relative_to_assets("images/chess/historial.png"))
         # Variables para la imágenes de adorno
         self.logo = 0
         self.logo_img = 0
@@ -55,7 +55,7 @@ class Interface():
         """Crea los botones del menú del juego"""
         for i in range(6):
             self.img_buttons.append(PhotoImage(
-            file=relative_to_assets("images/"+self.fun_names[i][0] + ".png")))
+            file=relative_to_assets("images/chess/"+self.fun_names[i][0] + ".png")))
             self.buttons.append(Button(
                 image=self.img_buttons[i],
                 borderwidth=0,
@@ -92,7 +92,7 @@ class Interface():
         for i in range(2):
             #Imágen que indica el color
             self.play_history[i].append((PhotoImage(
-                file=relative_to_assets("images/image_"+ str(i+1) +".png"))))
+                file=relative_to_assets("images/chess/image_"+ str(i+1) +".png"))))
             
             #Donde irán las jugadas
             self.play_history[i].append(self.canvas.create_image(
@@ -124,7 +124,7 @@ class Interface():
            para que se vea mejor"""
         #Logo
         self.logo_img = PhotoImage(
-            file=relative_to_assets("images/logo.png"))
+            file=relative_to_assets("images/chess/logo.png"))
         self.logo = self.canvas.create_image(
             91.0,
             99.0,

@@ -39,7 +39,7 @@ class Box():
         """
         piece = self.name+self.color+str(self.back)
         self.img_box = PhotoImage(
-            file=relative_to_assets("images/"+piece+".png"))
+            file=relative_to_assets("images/chess/"+piece+".png"))
 
     def show_on_screen(self):
         """ Muestra en pantalla la casilla """
