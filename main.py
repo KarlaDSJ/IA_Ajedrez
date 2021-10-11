@@ -66,7 +66,6 @@ class Home(Interface):
            de un jugador al seleccionar calcular Elo"""
         self.clean()
         self.interface_elo.set_text()
-        self.interface_elo.set_k_data()
         self.interface_elo.set_buttons()
 
 if __name__ == "__main__":

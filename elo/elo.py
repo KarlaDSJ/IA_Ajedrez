@@ -1,6 +1,12 @@
 from tkinter import messagebox
+from tkinter.constants import NUMERIC
 
 class Elo:
+    """ ELO
+    
+    Clase que me permite calcular el rating de un jugador
+    utilizando el sistema de puntuación Elo, y su desempeño
+    """
     def __init__(self) -> None:
         #Valores dados por el usuario
         self.Ro = 0 #Rating actual
@@ -11,57 +17,67 @@ class Elo:
         self.prom = 0
         self.is_valid = False
 
-    def set_Ro(self, Ro):
-        """Verifica el rating del jugador y lo guarda"""
-        if Ro > 3000:
+    def set_players_rating(self, players):
+        """Guarda el rating de los oponentes"""
+        self.players_rating = players
+
+    def validate_data(self, data) -> bool:
+        """Verifica que los datos iniciales sean válidos
+
+            data[0] - rating inicial
+            data[1] - número de juegos
+            data[2] - resultado de juegos
+            data[3] - k (constante según las partidas)
+        """
+        if data[0] > 3000:
             messagebox.showerror("Error","Ingresa un rating menor a 3000")
             self.is_valid = False
-        else:
-            self.Ro = Ro
-            self.is_valid = True
-
-    def set_games(self, games):
-        """Verifica el número de juegos y lo guarda"""
-        if games > 29:
+        elif data[1] > 29:
             messagebox.showerror("Error","El límite de partidas es 29")
             self.is_valid = False
-        else:
-            self.games = games
-            self.is_valid = True
-
-    def set_results(self, results):
-        """Verifica el número de juegos ganados y lo guarda"""
-        if results > self.games*3:
+        elif data[2] > data[1]:
             messagebox.showerror("Error","El número de partidas jugadas es mayor al de ganadas")
             self.is_valid = False
         else:
-            self.Ro = results
+            self.Ro = data[0]
+            self.games = data[1]
+            self.results = data[2]
+            self.k = data[3]
             self.is_valid = True
 
-    def set_k(self, k):
-        """Guarda la constante k del jugador"""
-        self.k = k
+        return self.is_valid
 
-    def get_initial_info(self):
+    def get_initial_info(self) -> list:
         """Regresa la infomación dada en un inicio 
         para hacer los cálculos"""
         return [self.Ro, self.games, self.results]
 
-    def get_we(self):
+    def get_average(self) -> int:
+        """Regresa el promedio de los ratings de los oponentes"""
+        return self.prom
+
+    def get_games(self) -> int:
+        """Regresa el número de partidas de ajedrez"""
+        return self.games
+
+    def get_we(self) -> int:
         """Valor esperado de partidas ganadas"""
         d = self.prom - self.Ro
         return 1 / (1 + 10**(d/400))
 
-    def calculate_elo(self):
+    def calculate_elo(self) -> int:
         """Regresa el nuevo rating del jugador (Elo)"""
         #Promedio
         self.prom = sum(self.players_rating) / len(self.players_rating)
-        return self.Ro + self.k * (self.results - self.get_we())
+        self.prom = float("{:.2f}".format(self.prom))
+        elo = self.Ro + self.k * (self.results - self.get_we())
+        return float("{:.2f}".format(elo))
 
-    def calculate_performance(self):
+    def calculate_performance(self) -> int:
         """Regresa el rendimiento de un jugador sin tomar 
         en cuenta el valor de k"""
-        factor = (self.set_games - self.set_results) / self.set_games
-        return len(self.players_rating + 400 * factor)
+        factor = (self.games - self.results) / self.games
+        performance = len(self.players_rating) + 400 * factor 
+        return float("{:.2f}".format(performance))
 
    
