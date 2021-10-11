@@ -1,4 +1,4 @@
-from config import relative_to_assets
+from common.config import relative_to_assets
 from tkinter import PhotoImage, Button
 
 class Box():

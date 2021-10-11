@@ -1,7 +1,8 @@
-from config import relative_to_assets
+from common.config import relative_to_assets
 from tkinter import Button, PhotoImage
+from common.interface import Interface
 
-class Menu:
+class Menu(Interface):
     """
     Menu
 
@@ -10,13 +11,11 @@ class Menu:
     """
     
     def __init__(self, canvas, board) -> None:
+        Interface.__init__(self, canvas, [])
         self.canvas = canvas
         self.board = board
         self.pieces = ["R","D","T","A","C","p"]
         self.is_select = True
-        #Primeros 0-5 negras, 6 - 11 blancas
-        self.buttons= [] # Botones para la fichas 
-        self.img_buttons= [] #Imágenes de los botones
         #Img para seleccionar una pieza
         self.select_piece =PhotoImage(
             file=relative_to_assets("images/chess/seleccionar.png"))
@@ -66,13 +65,6 @@ class Menu:
                 height=43.0
             )
 
-    def delete_menu(self):
-        """Quita las opciones para agregar piezas"""
-        for i in self.buttons:
-            i.destroy()
-        self.buttons= [] 
-        self.img_buttons= []
-
     def switch_var(self, val):
         """Función auxiliar para indicar si una pieza 
            debe ponerse o quitarse"""
@@ -112,7 +104,7 @@ class Menu:
             image=self.close,
             borderwidth=0,
             highlightthickness=0,
-            command= self.delete_menu,
+            command= lambda x = False: self.clean(x),
             relief="flat"
         ))
 
@@ -122,3 +114,7 @@ class Menu:
             width=40.0,
             height=40.0
         )
+
+# https://es.wikipedia.org/wiki/Sistema_de_puntuaci%C3%B3n_Elo
+# https://la-morsa.blogspot.com/2011/05/la-medida-del-desempeno-en-ajedrez.html
+# http://la-morsa.blogspot.com/search?q=elo

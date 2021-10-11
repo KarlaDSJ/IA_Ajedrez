@@ -1,11 +1,12 @@
-from config import relative_to_assets
+from common.config import relative_to_assets
 from chess.board import Board
 from chess.menu import Menu
+from common.interface import Interface
 from tkinter import Text, Button, PhotoImage
 
-class Interface():
+class InterfaceChess(Interface):
     """
-    Interface
+    InterfaceChess
 
     Crea una interfaz para que el usuario pueda interactuar 
     con el tablero de ajedrez
@@ -14,15 +15,6 @@ class Interface():
         self.canvas = canvas
         self.board = Board(canvas)
         self.pieces_menu = Menu(canvas, self.board)
-        self.buttons = [] # Botones del menú
-        self.img_buttons = [] #Imágenes de los botones
-        #Nombres de los botones y la función que harán al dar click
-        self.fun_names = [("recrear_jugada", self.pieces_menu.set_menu), 
-                          ("limpiar", self.board.set_empty_board), 
-                          ("guardar_jugada", self.board.save), 
-                          ("jugar", self.board.set_initial_board),
-                          ("rotar", self.board.rotate), 
-                          ("guardar_historial", self.board.save_play_history)]
         # Recuadros en donde se mostrarán las jugadas
         self.play_history = [[],[]] 
         #Recuadro para historial de jugadas
@@ -35,6 +27,14 @@ class Interface():
         self.image_down_img = 0
         self.image_top = 0
         self.image_top_img = 0
+        #Nombres de los botones y la función que harán al dar click
+        button_info = [("recrear_jugada", self.pieces_menu.set_menu), 
+                          ("limpiar", self.board.set_empty_board), 
+                          ("guardar_jugada", self.board.save), 
+                          ("jugar", self.board.set_initial_board),
+                          ("rotar", self.board.rotate), 
+                          ("guardar_historial", self.board.save_play_history)]
+        super().__init__(canvas, button_info)
 
     def set_board(self):
         """Crea un tablero de ajedrez vacío"""
@@ -55,12 +55,12 @@ class Interface():
         """Crea los botones del menú del juego"""
         for i in range(6):
             self.img_buttons.append(PhotoImage(
-            file=relative_to_assets("images/chess/"+self.fun_names[i][0] + ".png")))
+            file=relative_to_assets("images/chess/"+self.button_name[i][0] + ".png")))
             self.buttons.append(Button(
                 image=self.img_buttons[i],
                 borderwidth=0,
                 highlightthickness=0,
-                command=self.fun_names[i][1],
+                command=self.button_name[i][1],
                 relief="flat"
             ))
             if i == 5:
@@ -130,19 +130,6 @@ class Interface():
             99.0,
             image=self.logo_img
         )
-        #Adornos parte inferior
-        self.image_top_img = PhotoImage(
-            file=relative_to_assets("images/ola_top.png"))
-        self.image_top = self.canvas.create_image(
-            385.0,
-            10.0,
-            image=self.image_top_img
-        )
-        #Adornos parte superior
-        self.image_down_img = PhotoImage(
-            file=relative_to_assets("images/ola_down.png"))
-        self.image_down = self.canvas.create_image(
-            385.0,
-            552.0,
-            image=self.image_down_img
-        )
+        #self.go_home(35, 561)
+        self.set_footer()
+        self.set_header()

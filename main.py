@@ -1,14 +1,16 @@
-from chess.interface import Interface
-from config import relative_to_assets
+from chess.interfaceChess import InterfaceChess
+from elo.interfaceElo import InterfaceElo
+from common.config import relative_to_assets
+from common.interface import Interface
 from tkinter import Tk, Canvas, PhotoImage, Button
 
 """
     Programa que en un futuro le dará la oportunidad al usuario de jugar    
     ajedrez contra la computadora (IA), pero que por el momento permite 
     poner piezas en el tablero, guardar la configuración del mismo como 
-    imagen o como pdf o calcular el raiting de un jugador.
+    imagen o como pdf o calcular el rating de un jugador.
 """
-class Home():
+class Home(Interface):
     """
     Home
 
@@ -16,13 +18,12 @@ class Home():
     con los diferentes programas (jugar, calcular Elo)
     """
     def __init__(self, canvas) -> None:
+        button_info = [("jugar", self.set_game),
+                       ("calcular ELO", self.set_elo)]
+        super().__init__(canvas, button_info)
         self.canvas = canvas 
-        self.interface = Interface(self.canvas)
-         #Nombres de los botones y la función que harán al dar click
-        self.button_name = [("jugar", self.set_game), 
-                    ("calcular ELO", self.set_game)]
-        self.buttons = [] # Botones del Inicio
-        self.img_buttons = [] #Imágenes de los botones
+        self.interface_chess = InterfaceChess(self.canvas)
+        self.interface_elo = InterfaceElo(self.canvas)
 
     def set_home(self):
         """ Mustra las opciones (jugar o calcular Elo)"""
@@ -52,21 +53,21 @@ class Home():
                 height=49.0
             )
 
-    def clean(self):
-        """Limpia el canvas"""
-        self.canvas.delete('all')
-        for i in self.buttons:
-            i.destroy()
-        self.buttons= [] 
-        self.img_buttons= []
-
     def set_game(self):
         """Se muestra el tablero de ajedrez al dar click en jugar"""
         self.clean()
-        self.interface.set_ornaments()
-        self.interface.set_play_history()
-        self.interface.create_buttons()
-        self.interface.set_board()
+        self.interface_chess.set_ornaments()
+        self.interface_chess.set_play_history()
+        self.interface_chess.create_buttons()
+        self.interface_chess.set_board()
+
+    def set_elo(self):
+        """Se muestra todo lo necesario para calcular el rating
+           de un jugador al seleccionar calcular Elo"""
+        self.clean()
+        self.interface_elo.set_text()
+        self.interface_elo.set_k_data()
+        self.interface_elo.set_buttons()
 
 if __name__ == "__main__":
     window = Tk()
