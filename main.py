@@ -1,7 +1,7 @@
-from chess.interfaceChess import InterfaceChess
-from elo.interfaceElo import InterfaceElo
-from common.config import relative_to_assets
-from common.interface import Interface
+from src.chess.interfaceChess import InterfaceChess
+from src.elo.interfaceElo import InterfaceElo
+from src.common.config import relative_to_assets
+from src.common.interface import Interface
 from tkinter import Tk, Canvas, PhotoImage, Button
 
 """
@@ -22,8 +22,8 @@ class Home(Interface):
                        ("calcular ELO", self.set_elo)]
         super().__init__(canvas, button_info)
         self.canvas = canvas 
-        self.interface_chess = InterfaceChess(self.canvas)
-        self.interface_elo = InterfaceElo(self.canvas)
+        self.interface_chess = InterfaceChess(self.canvas, self.set_home)
+        self.interface_elo = InterfaceElo(self.canvas, self.set_home)
 
     def set_home(self):
         """ Mustra las opciones (jugar o calcular Elo)"""

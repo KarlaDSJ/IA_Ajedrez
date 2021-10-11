@@ -1,6 +1,6 @@
-from common.config import relative_to_assets
+from src.common.config import relative_to_assets
 from tkinter import Button, PhotoImage
-from common.interface import Interface
+from src.common.interface import Interface
 
 class Menu(Interface):
     """

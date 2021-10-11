@@ -177,3 +177,10 @@ class Board():
         self.set_empty_board()
         self.set_fila(0,1*8,"N")
         self.set_fila(7*8,6*8,"B")
+
+    def clean(self):
+        """Quitamos el tablero"""
+        self.canvas.delete('all')
+        for i in self.board:
+            i.clean()
+        self.board = []

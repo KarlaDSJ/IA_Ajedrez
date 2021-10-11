@@ -1,5 +1,5 @@
-from tkinter import PhotoImage, Button
-from common.config import relative_to_assets
+from tkinter import PhotoImage
+from .config import relative_to_assets
 
 class Interface():
     """
@@ -44,20 +44,4 @@ class Interface():
             image=self.image_top_img
         )
     
-    def go_home(self, coor_x, coor_y):
-        button_image_3 = PhotoImage(
-            file=relative_to_assets("images/home.png"))
-        button_3 = Button(
-            image=button_image_3,
-            borderwidth=0,
-            highlightthickness=0,
-            command=self.set_home(),
-            relief="flat"
-        )
-        button_3.place(
-            x=coor_x,
-            y=coor_y,
-            width=40.0,
-            height=40.0
-        )
         

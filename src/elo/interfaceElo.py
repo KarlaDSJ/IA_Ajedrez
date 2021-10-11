@@ -1,8 +1,7 @@
-from tkinter import messagebox
-from common.config import relative_to_assets
-from common.interface import Interface
-from tkinter import Entry, Button, PhotoImage
-from elo.elo import Elo
+from src.common.config import relative_to_assets
+from src.common.interface import Interface
+from tkinter import Entry, Button, PhotoImage, messagebox
+from .elo import Elo
 
 class InterfaceElo(Interface):
     """
@@ -11,20 +10,23 @@ class InterfaceElo(Interface):
     Crea una interfaz para que el usuario pueda interactuar 
     con el tablero de ajedrez
     """
-    def __init__(self, canvas) -> None:
+    def __init__(self, canvas, set_home) -> None:
         self.canvas = canvas
-        self.canvas.place(x = 0, y = 0)
+        #Home
+        self.set_home = set_home
         #Para que el usuario ingrese los valores
         self.entry_img = []
         self.entry = []
         #Para la barra del valor K
         self.images = []
         self.elo = Elo()
-        button_info = ["10","20","40", 
+        button_info = [("regresar", self.back),
+                       ("home", self.go_home),
                        ("calcular", self.calculate),
-                       ("limpiar", self.clean_ratings),
-                       ("regresar", self.back),
-                       ("home", self.back)]
+                       ("limpiar", self.clean_ratings)]
+        self.button_menu = [("home", self.go_home),
+                            ("siguiente", self.click_next),
+                            ("limpiar", self.clean_ratings),]
         super().__init__(canvas, button_info)
 
     def set_options(self, op, size, x, y):
@@ -78,29 +80,6 @@ class InterfaceElo(Interface):
                 width=209.0,
                 height=27.0
             )
-
-    def set_buttons(self):
-        """Muestra en pantalla los adornos de footer y header
-         y los la opción de continuar"""
-
-        self.set_footer()
-        self.set_header()
-
-        self.img_buttons.append(PhotoImage(
-            file=relative_to_assets("images/elo/siguiente.png")))
-        self.buttons.append(Button(
-            image= self.img_buttons[0],
-            borderwidth=0,
-            highlightthickness=0,
-            command=self.click_next,
-            relief="flat"
-        ))
-        self.buttons[0].place(
-            x=649.0,
-            y=58.0,
-            width=40.0,
-            height=40.0
-        )
     
     def clean(self):
         """Eliminamos todo lo del canvas"""
@@ -118,14 +97,12 @@ class InterfaceElo(Interface):
                 info=["Rating acual","Número de juegos", "Resultado del torneo"]
                 results=["Rating nuevo", "Desempeño", "Rating Promedio"]
                 self.clean()
-                self.set_footer()
-                self.set_header()
                 self.set_players_rating()
-                self.set_options(info,14,139,62)
-                self.set_options(self.elo.get_initial_info(),14,310,62)
+                self.set_options(info,14,169,62)
+                self.set_options(self.elo.get_initial_info(),14,340,62)
                 self.set_options(["Ratings de los oponentes"],14,39,188)
-                self.set_options(results,14,412,62)
-                self.set_buttons2()
+                self.set_options(results,14,402,62)
+                self.set_buttons(True,4)
         except:
             messagebox.showerror("Datos inválidos","Por favor llena los campos")
 
@@ -169,25 +146,32 @@ class InterfaceElo(Interface):
             else:
                 y+=1
 
-    def set_buttons2(self):
+    def set_buttons(self, menu2 = False, r=3):
         """Agrega los botones para calcular, limpiar, regresar
-        y home"""
-        for i in range(4):
+        y home
+            menu2 - nos indica que botones poner según la página
+            r - número de botones
+        """
+        self.set_footer()
+        self.set_header()
+        button_name = self.button_name if menu2 else self.button_menu 
+
+        for i in range(r):
             self.img_buttons.append(PhotoImage(
-            file=relative_to_assets("images/elo/"+self.button_name[i+3][0] + ".png")))
+            file=relative_to_assets("images/elo/"+button_name[i][0] + ".png")))
             self.buttons.append(Button(
                 image=self.img_buttons[i],
                 borderwidth=0,
                 highlightthickness=0,
-                command=self.button_name[i+3][1],
+                command=button_name[i][1],
                 relief="flat"
             ))
  
             self.buttons[i].place(
-                x= 561 if i < 2 else 50 + ((i-2) * 620),
-                y= 434 + (i*46) if i < 2 else 65,
-                width=40 if i > 1 else 117.41,
-                height=40 if i > 1 else 29.89
+                x=50 + (i * 620) if i < 2 else 561,
+                y=65 if i < 2 else 434 + ((i-2)*46),
+                width=40 if i < 2 else 117.41,
+                height=40 if i < 2 else 29.89
             )
                 
     def clean_ratings(self):
@@ -207,4 +191,9 @@ class InterfaceElo(Interface):
         self.elo.set_players_rating(self.get_data())
         elo = self.elo.calculate_elo()
         performance = self.elo.calculate_performance()
-        self.set_options([elo, performance, self.elo.get_average()],14,550,62)
+        self.set_options([elo, performance, self.elo.get_average()],14,540,62)
+
+    def go_home(self):
+        """Regresa al usuario a la página principal"""
+        self.clean()
+        self.set_home()
