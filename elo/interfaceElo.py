@@ -1,4 +1,4 @@
-from tkinter.constants import S
+from tkinter import messagebox
 from common.config import relative_to_assets
 from common.interface import Interface
 from tkinter import Entry, Button, PhotoImage
@@ -19,13 +19,9 @@ class InterfaceElo(Interface):
         self.entry = []
         #Para la barra del valor K
         self.images = []
-        #Valores dados por el usuario
-        self.Ro = 2000 #Rating actual
-        self.games = 29 #Número de juegos 
-        self.results = 30 #Puntos obtenidos de los juegos
-        self.elo = Elo(canvas)
+        self.elo = Elo()
         button_info = ["10","20","40", 
-                       ("calcular", self.elo.calculate),
+                       ("calcular", self.elo.calculate_elo),
                        ("limpiar", self.clean_ratings),
                        ("regresar", self.back),
                        ("home", self.back)]
@@ -135,18 +131,20 @@ class InterfaceElo(Interface):
 
     def click_next(self):
         """Nos lleva a la siguiente página para calcular el elo"""
-        info=["Rating acual","Número de juegos", "Resultado del torneo"]
-        results=["Rating nuevo", "Desempeño", "Rating Promedio"]
-        value=[self.Ro, self.games, self.results]
-        self.clean()
-        self.set_footer()
-        self.set_header()
-        self.set_players_rating()
-        self.set_options(info,14,139,62)
-        self.set_options(value,14,310,62)
-        self.set_options(["Ratings de los oponentes"],14,39,188)
-        self.set_options(results,14,412,62)
-        self.set_buttons2()
+        if self.elo.is_valid:
+            info=["Rating acual","Número de juegos", "Resultado del torneo"]
+            results=["Rating nuevo", "Desempeño", "Rating Promedio"]
+            self.clean()
+            self.set_footer()
+            self.set_header()
+            self.set_players_rating()
+            self.set_options(info,14,139,62)
+            self.set_options(self.elo.get_initial_info(),14,310,62)
+            self.set_options(["Ratings de los oponentes"],14,39,188)
+            self.set_options(results,14,412,62)
+            self.set_buttons2()
+        else:
+            messagebox.showerror("Datos inválidos","Verifica los datos para continuar")
 
     def set_players_rating(self):
         """Agrega las casillas sufucientes para ingresar el rating de los

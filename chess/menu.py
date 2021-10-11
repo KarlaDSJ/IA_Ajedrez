@@ -114,7 +114,3 @@ class Menu(Interface):
             width=40.0,
             height=40.0
         )
-
-# https://es.wikipedia.org/wiki/Sistema_de_puntuaci%C3%B3n_Elo
-# https://la-morsa.blogspot.com/2011/05/la-medida-del-desempeno-en-ajedrez.html
-# http://la-morsa.blogspot.com/search?q=elo
