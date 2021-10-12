@@ -1,4 +1,4 @@
-from config import relative_to_assets
+from src.common.config import relative_to_assets
 from tkinter import PhotoImage, Button
 
 class Box():
@@ -39,7 +39,7 @@ class Box():
         """
         piece = self.name+self.color+str(self.back)
         self.img_box = PhotoImage(
-            file=relative_to_assets("images/"+piece+".png"))
+            file=relative_to_assets("images/chess/"+piece+".png"))
 
     def show_on_screen(self):
         """ Muestra en pantalla la casilla """
@@ -74,3 +74,9 @@ class Box():
            > Color de la pieza
            > Inicial de la pieza"""
         return self.name+self.color+str(self.back)
+    
+    def clean(self):
+        """Eliminamos la casilla del tablero"""
+        self.canvas_box.destroy()
+        self.canvas_box = 0
+        self.img_box = 0

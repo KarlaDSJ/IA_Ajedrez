@@ -1,40 +1,48 @@
-from config import relative_to_assets
-from chess.board import Board
-from chess.menu import Menu
+from src.common.config import relative_to_assets
+from .board import Board
+from .menu import Menu
+from src.common.interface import Interface
 from tkinter import Text, Button, PhotoImage
 
-class Interface():
+class InterfaceChess(Interface):
     """
-    Interface
+    InterfaceChess
 
     Crea una interfaz para que el usuario pueda interactuar 
     con el tablero de ajedrez
     """
-    def __init__(self, canvas) -> None:
+    def __init__(self, canvas, set_home) -> None:
         self.canvas = canvas
+        self.set_home = set_home #Home
         self.board = Board(canvas)
         self.pieces_menu = Menu(canvas, self.board)
-        self.buttons = [] # Botones del menú
-        self.img_buttons = [] #Imágenes de los botones
-        #Nombres de los botones y la función que harán al dar click
-        self.fun_names = [("recrear_jugada", self.pieces_menu.set_menu), 
-                          ("limpiar", self.board.set_empty_board), 
-                          ("guardar_jugada", self.board.save), 
-                          ("jugar", self.board.set_initial_board),
-                          ("rotar", self.board.rotate), 
-                          ("guardar_historial", self.board.save_play_history)]
         # Recuadros en donde se mostrarán las jugadas
         self.play_history = [[],[]] 
         #Recuadro para historial de jugadas
         self.rec_history =PhotoImage(
-            file=relative_to_assets("images/historial.png"))
+            file=relative_to_assets("images/chess/historial.png"))
         # Variables para la imágenes de adorno
         self.logo = 0
         self.logo_img = 0
-        self.image_down = 0
-        self.image_down_img = 0
-        self.image_top = 0
-        self.image_top_img = 0
+        #Nombres de los botones y la función que harán al dar click
+        button_info = [("home", self.go_home),
+                       ("recrear_jugada", self.pieces_menu.set_menu), 
+                       ("limpiar", self.board.set_empty_board), 
+                       ("guardar_jugada", self.board.save), 
+                       ("jugar", self.board.set_initial_board),
+                       ("rotar", self.board.rotate), 
+                       ("guardar_historial", self.board.save_play_history)]
+        super().__init__(canvas, button_info)
+
+    def go_home(self):
+        """Regresa al usuario a la página principal"""
+        self.clean()
+        self.play_history[0][2].destroy()
+        self.play_history[1][2].destroy()
+        self.play_history = [[],[]] 
+        self.board.clean()
+        self.pieces_menu.clean()
+        self.set_home()
 
     def set_board(self):
         """Crea un tablero de ajedrez vacío"""
@@ -53,17 +61,17 @@ class Interface():
 
     def create_buttons(self):
         """Crea los botones del menú del juego"""
-        for i in range(6):
+        for i in range(7):
             self.img_buttons.append(PhotoImage(
-            file=relative_to_assets("images/"+self.fun_names[i][0] + ".png")))
+            file=relative_to_assets("images/chess/"+self.button_name[i][0] + ".png")))
             self.buttons.append(Button(
                 image=self.img_buttons[i],
                 borderwidth=0,
                 highlightthickness=0,
-                command=self.fun_names[i][1],
+                command=self.button_name[i][1],
                 relief="flat"
             ))
-            if i == 5:
+            if i == 6:
                 self.buttons[i].place(
                     x=598.3993530273438,
                     y=479.40289306640625,
@@ -72,10 +80,10 @@ class Interface():
                 )
             else: 
                 self.buttons[i].place(
-                    x=28.134521484375,
+                    x=28.134521484375 if i != 0 else 70,
                     y=175.0877685546875 + (55 * i),
-                    width=117.407470703125,
-                    height=29.888092041015625
+                    width=117.407470703125 if i != 0 else 40,
+                    height=29.888092041015625 if i != 0 else 40
                 )
 
     def set_play_history (self):
@@ -92,7 +100,7 @@ class Interface():
         for i in range(2):
             #Imágen que indica el color
             self.play_history[i].append((PhotoImage(
-                file=relative_to_assets("images/image_"+ str(i+1) +".png"))))
+                file=relative_to_assets("images/chess/image_"+ str(i+1) +".png"))))
             
             #Donde irán las jugadas
             self.play_history[i].append(self.canvas.create_image(
@@ -124,25 +132,11 @@ class Interface():
            para que se vea mejor"""
         #Logo
         self.logo_img = PhotoImage(
-            file=relative_to_assets("images/logo.png"))
+            file=relative_to_assets("images/chess/logo.png"))
         self.logo = self.canvas.create_image(
             91.0,
             99.0,
             image=self.logo_img
         )
-        #Adornos parte inferior
-        self.image_top_img = PhotoImage(
-            file=relative_to_assets("images/ola_top.png"))
-        self.image_top = self.canvas.create_image(
-            385.0,
-            10.0,
-            image=self.image_top_img
-        )
-        #Adornos parte superior
-        self.image_down_img = PhotoImage(
-            file=relative_to_assets("images/ola_down.png"))
-        self.image_down = self.canvas.create_image(
-            385.0,
-            552.0,
-            image=self.image_down_img
-        )
+        self.set_footer()
+        self.set_header()

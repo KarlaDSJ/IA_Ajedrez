@@ -1,7 +1,8 @@
-from config import relative_to_assets
+from src.common.config import relative_to_assets
 from tkinter import Button, PhotoImage
+from src.common.interface import Interface
 
-class Menu:
+class Menu(Interface):
     """
     Menu
 
@@ -10,22 +11,20 @@ class Menu:
     """
     
     def __init__(self, canvas, board) -> None:
+        Interface.__init__(self, canvas, [])
         self.canvas = canvas
         self.board = board
         self.pieces = ["R","D","T","A","C","p"]
         self.is_select = True
-        #Primeros 0-5 negras, 6 - 11 blancas
-        self.buttons= [] # Botones para la fichas 
-        self.img_buttons= [] #Imágenes de los botones
         #Img para seleccionar una pieza
         self.select_piece =PhotoImage(
-            file=relative_to_assets("images/seleccionar.png"))
+            file=relative_to_assets("images/chess/seleccionar.png"))
         #Img para borrar una pieza
         self.delete_piece  =PhotoImage(
-            file=relative_to_assets("images/borrar.png"))
+            file=relative_to_assets("images/chess/borrar.png"))
         #Img para cerrar el menú
         self.close  =PhotoImage(
-            file=relative_to_assets("images/close.png"))
+            file=relative_to_assets("images/chess/close.png"))
 
     def do_click(self, id):
         """
@@ -51,7 +50,7 @@ class Menu:
         for i in range(6):
             name = self.pieces[i] + color
             self.img_buttons.append(PhotoImage(
-                file=relative_to_assets("images/" + name + "0.png")))
+                file=relative_to_assets("images/chess/" + name + "0.png")))
             self.buttons.append(Button(
                 image=self.img_buttons[p+i],
                 borderwidth=0,
@@ -65,16 +64,6 @@ class Menu:
                 width=43.0,
                 height=43.0
             )
-
-    def delete_menu(self):
-        """Quita las opciones para agregar piezas"""
-        for i in self.buttons:
-            i.destroy()
-        self.buttons= [] 
-        self.img_buttons= []
-
-        #Falta crear el Pdf
-
 
     def switch_var(self, val):
         """Función auxiliar para indicar si una pieza 
@@ -115,7 +104,7 @@ class Menu:
             image=self.close,
             borderwidth=0,
             highlightthickness=0,
-            command= self.delete_menu,
+            command= lambda x = False: self.clean(x),
             relief="flat"
         ))
 

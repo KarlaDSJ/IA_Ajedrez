@@ -6,7 +6,7 @@ Establece la ruta para encontrar las imágenes
 
 from pathlib import Path
 
-OUTPUT_PATH = Path(__file__).parent
+OUTPUT_PATH = Path(__file__).parent.parent.parent
 ASSETS_PATH = OUTPUT_PATH / Path("./assets")
 
 
