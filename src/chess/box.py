@@ -51,7 +51,7 @@ class Box():
                                 relief="flat"
                             )
         self.canvas_box.place(
-            x=192.0 + (43 * self.y),
+            x=57 + (43 * self.y),
             y=105.0 + (43 * self.x),
             width=43.0,
             height=43.0

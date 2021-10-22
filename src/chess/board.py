@@ -57,8 +57,8 @@ class Board():
         """Agrega los números de las coordenadas del tablero"""
         for i in range(8):
             self.canvas.create_text(
-                177.0,
-                421.0 - (43 * i),
+                41.8695068359375,
+                420 - (43 * i),
                 anchor="nw",
                 text=str(i + 1),#Números
                 fill="#000000",
@@ -71,8 +71,8 @@ class Board():
         for i in range(8):
             #Letras
             self.canvas.create_text(
-                205.0 + (43 * i),
-                453.0,
+                67.8695068359375 + (43 * i),
+                456.9809265136719,
                 anchor="nw",
                 text= letters[i], #Letras
                 fill="#000000",
@@ -157,7 +157,7 @@ class Board():
 
     def set_fila(self, x_i, x_j, color):
         """
-            Pone las 2 filas de piezas de un colar para
+            Pone las 2 filas de piezas de un color para
             el inicio del juego
 
             x_i - número de la fila donde está el rey 

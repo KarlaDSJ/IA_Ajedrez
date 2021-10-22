@@ -17,6 +17,9 @@ class Menu(Interface):
         self.pieces = ["R","D","T","A","C","p"]
         self.is_select = True
         #Img para seleccionar una pieza
+        self.new_move =PhotoImage(
+            file=relative_to_assets("images/chess/agregar.png"))
+        #Img para seleccionar una pieza
         self.select_piece =PhotoImage(
             file=relative_to_assets("images/chess/seleccionar.png"))
         #Img para borrar una pieza
@@ -59,7 +62,7 @@ class Menu(Interface):
                 relief="flat"
             ))
             self.buttons[p+i].place(
-                x=234.0 + (43 * i),
+                x=100.0 + (43 * i),
                 y= y,
                 width=43.0,
                 height=43.0
@@ -93,7 +96,7 @@ class Menu(Interface):
             ))
 
             self.buttons[12 + i].place(
-                x=580.0 + (i * 55),
+                x=432.0 + (i * 55),
                 y=43.0 + (i*2),
                 width=50.0 - (i*10),
                 height=50.0 - (i*10)
@@ -104,13 +107,18 @@ class Menu(Interface):
             image=self.close,
             borderwidth=0,
             highlightthickness=0,
-            command= lambda x = False: self.clean(x),
+            command= self.clean,
             relief="flat"
         ))
 
         self.buttons[14].place(
-            x=685.0,
+            x=542.0,
             y=45,
             width=40.0,
             height=40.0
         )
+
+    def clean(self):
+        """Eliminamos el menu"""
+        super().clean(False)
+        self.board.set_piece("")
