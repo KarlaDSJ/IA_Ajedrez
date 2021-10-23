@@ -1,7 +1,8 @@
-from tkinter.constants import WORD
-from src.common.config import relative_to_assets
+from tkinter.constants import BOTH, END, LEFT, RIGHT, WORD, Y
+from .cardHolder import CardHolder
+from src.common.config import *
 from src.common.interface import Interface
-from tkinter import Entry, Button, PhotoImage, messagebox, Text
+from tkinter import Listbox, messagebox, Text, Scrollbar, PhotoImage, Button, Label
 
 class InterfaceCardH(Interface):
     """
@@ -10,39 +11,151 @@ class InterfaceCardH(Interface):
     Crea una interfaz para que el usuario pueda 
     agregar, modificar, buscar y ver jugadas 
     """
-    def __init__(self, canvas, set_home, board, set_menu) -> None:
-        self.canvas = canvas
+    def __init__(self, set_home, board, menu) -> None:
         #Home
         self.set_home = set_home
         #Tablero
         self.board = board 
         #Menu
-        self.set_menu = set_menu
+        self.set_menu = menu.set_menu
+        self.menu = menu
+        #Base de datos
+        self.card_holder = CardHolder()
+        self.cards = self.card_holder.get_all_cards()
+        self.holder_card = []
+        #Para los rectángulos de todas las cartas
+        self.rec = []
         #Para que el usuario ingrese los valores
         self.entry_img = []
         self.entry = []
+        #Img botón ver
+        self.look = PhotoImage(
+            file=relative_to_assets("images/elo/ver.png"))
         #Botones y su función al dar click
         self.button_info = [("regresar", self.back),
                        ("home", self.go_home),
                        ("guardar", self.save),
                        ("editar", self.set_menu),
-                       ("borrar", self.go_home)]
-        super().__init__(canvas, self.button_info)
+                       ("borrar", self.delete),
+                       ("agregar", lambda : self.card_on_click("", True))]
+        super().__init__(self.button_info)
+
+    def move_to_window(self):
+        """Limpia la ventana y prepara todo para la siguiente"""
+        self.clean()
+        self.set_footer()
+        self.set_header()
+        self.default_buttons()
+
+    def show_cards(self):
+        """Muestra todas las tarjetas de jugadas almacenadas 
+        en la base de datos"""
+        self.move_to_window()
+        #Rectángulo para jugadas
+        self.rec.append(canvas.create_rectangle(
+            66,
+            155,
+            704,
+            480,
+            fill="#E5E5E5",
+            outline=""))
+
+        self.rec.append(Scrollbar(window))
+        #self.rec[1].pack(side = RIGHT,fill = Y)
+
+        self.buttons[5].place(
+            x=346,
+            y=492,
+            width=84,
+            height=24
+        )
+
+        #self.rec.append(Listbox(window, 
+            #yscrollcommand = self.rec[1].set))
+
+        for i in range(len(self.cards)):
+            self.set_one_card(i)
+
+        #self.rec[2].pack(side = LEFT, fill = BOTH)
+        #self.rec[1].config(command=self.rec[2].yview)
+
+    def set_one_card(self, i):
+        """Muestra la información de una tarjeta de juego
+        i - id de la tarjeta"""
+        move = []
+        move.append(Label(
+                text=self.cards[i][1],
+                bg="#E5E5E5",
+                justify=LEFT)) #Título
+        move.append(Label(
+            text=self.cards[i][3],
+            bg="#E5E5E5",
+            justify=LEFT)) #Descripción
+        move[0].place(x=81, y=175 + (i*65))
+        move[1].place(x=301, y=172 + (i*65))
+        move.append(Button(
+                image=self.look,
+                borderwidth=0,
+                highlightthickness=0,
+                command= lambda id = i: self.card_on_click(id),
+                relief="flat"
+        ))
+        move[2].place(
+            x=602,
+            y=179 + (i*65),
+            width=70.7,
+            height=20
+        )
+        self.holder_card.append(move)
+        #self.rec[2].insert(END,move)
+
+    def card_on_click(self,id, new=False):
+        """Nos muestra otra vista para editar, guardar, eliminar
+        la tarjeta
+        id - Id de la jugada"""
+        self.move_to_window()
+        self.set_buttons()
+        #Rectángulo detrás del tablero
+        canvas.place(x = 0, y = 0)
+        canvas.create_rectangle(
+            34.0,
+            92.0,
+            410.6521301269531,
+            477.90203857421875,
+            fill="#C4C4C4",
+            outline="")
+        self.board.set_board_num()
+        self.board.set_board_letters()
+        if new:
+            self.id = ""
+            self.set_entry() #Mostramos las tarjeta
+            self.board.set_empty_board()
+        else:
+            self.id = self.cards[id][0]
+            self.set_entry(self.cards[id][1],self.cards[id][3]) #Mostramos las tarjeta
+            self.board.set_board(self.cards[id][2].split())
 
     def save(self):
         """Guarda en la base de datos la información
         de la tarjeta"""
-        print("Título: "+ self.entry[0].get(1.0,'end'))
-        print("Descripción: "+ self.entry[1].get(1.0,'end'))
-        #Falta guardarlo en la base
+        tablero = self.board.get_coord()
+        titulo = self.entry[0].get(1.0,'end')
+        descripcion = self.entry[1].get(1.0,'end')
+        if self.id == "":
+            self.cards = self.card_holder.add_card(titulo, tablero, descripcion)
+        else:
+            self.cards = self.card_holder.update_card(self.id,titulo, tablero, descripcion)
 
-    def delete_card(self):
-        #Falta borrarlo de la base
-        self.clean() 
+    def delete(self):
+        """Borra una tarjeta de la base de datos, no regresa a ver todas las 
+        jugadas"""
+        self.cards = self.card_holder.delete_card(self.id) 
+        self.clean()
+        self.show_cards()
 
-    def set_entry(self):
+    def set_entry(self, titulo = '''Título''',  descripcion = '''Descripción'''):
         #Rectángulo para jugadas
-        self.canvas.create_rectangle(
+        canvas.create_rectangle(
             432.0,
             98.0,
             599.0,
@@ -50,54 +163,35 @@ class InterfaceCardH(Interface):
             fill="#FFFFFF",
             outline="")
 
-        self.entry.append(Text(
-            width = 253, 
-            height = 35, 
-            wrap = WORD,
-            padx = 5,
-            pady = 5))
-        
-        self.entry.append(Text(
-            width = 253, 
-            height = 224, 
-            wrap = WORD,
-            padx = 5,
-            pady = 5))
+        for i in range(2):
+            self.entry.append(Text(
+                width = 253, 
+                height = 35 + (i*189), 
+                wrap = WORD,
+                padx = 5,
+                pady = 5))
 
-        self.entry[0].place(
+            self.entry[i].place(
                 x=462,
-                y=110,
+                y=110 + (i*60),
                 width=253,
-                height=35
+                height=35 + (i*189)
             )
-        self.entry[0].insert('1.0','''Título''')
-
-        self.entry[1].place(
-                x=462,
-                y=170,
-                width=253,
-                height=224
-            )
-        self.entry[1].insert('1.0','''Descripción''')
+            self.entry[i].insert('1.0',titulo if i == 0 else descripcion)
             
-    def get_data(self) -> list:
-        """Obtiene la información data por el usuario"""
-        data = []
-        try:
-            for text in self.entry:
-                data.append(int(text[1].get()))
-        except:
-            messagebox.showerror("Error","Los datos deben ser números")
-        return data
-
-    
     def clean(self):
         """Eliminamos todo lo del canvas"""
         super().clean()
-        for i in self.entry:
-            i[1].destroy()
-        self.entry_img = []
+        if len(self.entry) != 0:
+            for i in self.entry:
+                i.destroy()
+        for i in self.holder_card:
+            for j in i:
+                j.destroy()
+        self.holder_card = []
         self.entry = []
+        self.board.clean()
+        self.menu.clean()
 
     def default_buttons(self):
         """Agrega imágenes de adorno y para regresar a la
@@ -135,12 +229,9 @@ class InterfaceCardH(Interface):
             )
 
     def back(self):
-        """Nos regresa a la primera vista del elo
-        para ingresar nuevos datos"""
+        """Nos regresa a la vista de todas las tarjetas"""
         self.clean()
-        self.set_text()
-        self.set_buttons()
-        #Lo regresamos a la página de buscar
+        self.show_cards()
 
     def go_home(self):
         """Regresa al usuario a la página principal"""

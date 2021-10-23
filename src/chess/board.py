@@ -1,6 +1,7 @@
 from .box import Box
 from tkinter import messagebox
 #Para generar el pdf
+from src.common.config import * 
 from reportlab.lib.enums import TA_CENTER
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
@@ -18,8 +19,7 @@ class Board():
         > Crear un tablero para iniciar el juego
     """
     
-    def __init__(self, canvas) -> None:
-        self.canvas = canvas
+    def __init__(self) -> None:
         self.board = [] # Tablero compuesto de casillas
 
         #Para el historial de las piezas del tablero
@@ -56,7 +56,7 @@ class Board():
     def set_board_num(self):
         """Agrega los números de las coordenadas del tablero"""
         for i in range(8):
-            self.canvas.create_text(
+            canvas.create_text(
                 41.8695068359375,
                 420 - (43 * i),
                 anchor="nw",
@@ -70,7 +70,7 @@ class Board():
         letters  = list(map(chr, range(97, 105)))
         for i in range(8):
             #Letras
-            self.canvas.create_text(
+            canvas.create_text(
                 67.8695068359375 + (43 * i),
                 456.9809265136719,
                 anchor="nw",
@@ -86,7 +86,7 @@ class Board():
             for y in range(8):
                 if len(self.board) < 64:
                     #Si el tablero ya contiene todas las casillas
-                    box = Box(self.canvas, x, y, num * 1, self.put_piece)
+                    box = Box(x, y, num * 1, self.put_piece)
                     box.set_image()
                     box.show_on_screen()
                     self.board.append(box)
@@ -98,6 +98,36 @@ class Board():
 
     def rotate(self):
         print("Tablero rotado")
+
+    def set_board(self, pieces):
+        """Muestra un tablero con ciertas piezas
+        pieces - arreglo que contiene el nombre de las img 
+            para mostrar el tablero con las piezas"""
+        for x in range(8):
+            for y in range(8):
+                piece = pieces[(8*x)+y]
+                color = piece[-1]
+                if len(self.board) < 64:
+                    #Si el tablero no contiene todas las casillas
+                    box = Box(x, y, color, self.put_piece)
+                    box.set_image()
+                    box.show_on_screen()
+                    self.board.append(box)
+                #Modificamos su imagen
+                if len(piece) == 1:
+                    self.board[(8*x)+y].set_piece("","")
+                else:
+                    name = piece[:-1]
+                    self.board[(8*x)+y].set_piece(name[0],name[1])
+
+    def get_coord(self):
+        "Genera una cadena con las coordenas de las piezas en el tablero"
+        string = ""
+        for x in range(8):
+            for y in range(8):
+                string += self.board[(8*x)+y].get_name() + " "
+        return string
+
 
     def to_string(self) -> str:
         "Genera un string del tablero en la fuente MeridaChess"
@@ -180,7 +210,7 @@ class Board():
 
     def clean(self):
         """Quitamos el tablero"""
-        self.canvas.delete('all')
+        canvas.delete('all')
         for i in self.board:
             i.clean()
         self.board = []

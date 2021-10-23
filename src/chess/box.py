@@ -1,4 +1,4 @@
-from src.common.config import relative_to_assets
+from src.common.config import *
 from tkinter import PhotoImage, Button
 
 class Box():
@@ -17,8 +17,7 @@ class Box():
         C - Caballo
         p - Peón 
     """
-    def __init__(self, canvas, x, y, back, on_clik) -> None:
-        self.canvas = canvas
+    def __init__(self, x, y, back, on_clik) -> None:
         self.canvas_box = 0 #componente dentro del canvas
         self.img_box = 0 # Imagen de la casilla
         #Coordenadas

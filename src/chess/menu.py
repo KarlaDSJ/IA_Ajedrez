@@ -10,9 +10,8 @@ class Menu(Interface):
     para agregar/eliminar piezas negras o blancas
     """
     
-    def __init__(self, canvas, board) -> None:
-        Interface.__init__(self, canvas, [])
-        self.canvas = canvas
+    def __init__(self, board) -> None:
+        Interface.__init__(self, [])
         self.board = board
         self.pieces = ["R","D","T","A","C","p"]
         self.is_select = True

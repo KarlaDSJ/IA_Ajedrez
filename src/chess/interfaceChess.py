@@ -1,5 +1,5 @@
 from ..cardHolder.interfaceCardH import InterfaceCardH
-from src.common.config import relative_to_assets
+from src.common.config import *
 from .board import Board
 from .menu import Menu
 from src.common.interface import Interface
@@ -12,13 +12,12 @@ class InterfaceChess(Interface):
     Crea una interfaz para que el usuario pueda interactuar 
     con el tablero de ajedrez
     """
-    def __init__(self, canvas, set_home) -> None:
-        self.canvas = canvas
+    def __init__(self,set_home) -> None:
         self.set_home = set_home #Home
-        self.board = Board(canvas)
-        self.pieces_menu = Menu(canvas, self.board)
-        self.cards = InterfaceCardH(canvas, set_home, self.board, 
-                                    self.pieces_menu.set_menu)
+        self.board = Board()
+        self.pieces_menu = Menu(self.board)
+        self.cards = InterfaceCardH(set_home, self.board, 
+                                    self.pieces_menu)
         # Recuadros en donde se mostrarán las jugadas
         self.play_history = [[],[]] 
         #Recuadro para historial de jugadas
@@ -36,19 +35,17 @@ class InterfaceChess(Interface):
                        ("rotar", self.board.rotate), 
                        ("ver", self.show_cards),
                        ("guardar_historial", self.board.save_play_history)]
-        super().__init__(canvas, button_info)
+        super().__init__(button_info)
 
     def show_cards(self):
         """Elimina lo botones y el historial de jugadas 
         muestra las tarjetas"""
         #Quitamos:
-        self.clean(False) #Los botones
-        self.logo = 0 #Imagen de logo
-        self.logo_img = 0
-        self.pieces_menu.clean()
-        self.cards.set_entry() #Mostramos las tarjetas
+        self.clean()
+        self.delete_play_history()
+        self.board.clean()
         self.cards.default_buttons()
-        self.cards.set_buttons()
+        self.cards.show_cards()
 
     def go_home(self):
         """Regresa al usuario a la página principal"""
@@ -68,8 +65,8 @@ class InterfaceChess(Interface):
     def set_board(self):
         """Crea un tablero de ajedrez vacío"""
         #Rectángulo detrás del tablero
-        self.canvas.place(x = 0, y = 0)
-        self.canvas.create_rectangle(
+        canvas.place(x = 0, y = 0)
+        canvas.create_rectangle(
             34.0,
             92.0,
             410.6521301269531,
@@ -110,7 +107,7 @@ class InterfaceChess(Interface):
     def set_play_history (self):
         """Crea un recuadro para poner las jugadas de blancas y negras"""
         #Rectángulo para jugadas
-        self.canvas.create_rectangle(
+        canvas.create_rectangle(
             432.0,
             98.0,
             599.0,
@@ -124,7 +121,7 @@ class InterfaceChess(Interface):
                 file=relative_to_assets("images/chess/image_"+ str(i+1) +".png"))))
             
             #Donde irán las jugadas
-            self.play_history[i].append(self.canvas.create_image(
+            self.play_history[i].append(canvas.create_image(
                 475.0 + (81 * i),
                 303.0,
                 image=self.rec_history
@@ -142,7 +139,7 @@ class InterfaceChess(Interface):
             )
             
             #Img del color
-            self.play_history[i].append(self.canvas.create_image(
+            self.play_history[i].append(canvas.create_image(
                 475.0 + (81 * i),
                 116.0,
                 image=self.play_history[i][0]
@@ -154,7 +151,7 @@ class InterfaceChess(Interface):
         #Logo
         self.logo_img = PhotoImage(
             file=relative_to_assets("images/chess/logo.png"))
-        self.logo = self.canvas.create_image(
+        self.logo = canvas.create_image(
             675.0,
             89.0,
             image=self.logo_img

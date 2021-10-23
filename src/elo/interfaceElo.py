@@ -1,4 +1,4 @@
-from src.common.config import relative_to_assets
+from src.common.config import *
 from src.common.interface import Interface
 from tkinter import Entry, Button, PhotoImage, messagebox
 from .elo import Elo
@@ -10,8 +10,7 @@ class InterfaceElo(Interface):
     Crea una interfaz para que el usuario pueda interactuar 
     con el tablero de ajedrez
     """
-    def __init__(self, canvas, set_home) -> None:
-        self.canvas = canvas
+    def __init__(self, set_home) -> None:
         #Home
         self.set_home = set_home
         #Para que el usuario ingrese los valores
@@ -27,7 +26,7 @@ class InterfaceElo(Interface):
         self.button_menu = [("home", self.go_home),
                             ("siguiente", self.click_next),
                             ("limpiar", self.clean_ratings),]
-        super().__init__(canvas, button_info)
+        super().__init__(button_info)
 
     def set_options(self, op, size, x, y):
         """Muestra en pantalla el texto de los datos requeridos
@@ -35,7 +34,7 @@ class InterfaceElo(Interface):
            size - tamaño de la letra
         """
         for i, val in enumerate(op):
-            self.canvas.create_text(
+            canvas.create_text(
                 x,
                 y + (i*46),
                 anchor="nw",
@@ -64,7 +63,7 @@ class InterfaceElo(Interface):
         for i in range(4):
             self.entry_img.append(PhotoImage(
                 file=relative_to_assets("images/elo/texto.png")))
-            self.entry.append([self.canvas.create_image(
+            self.entry.append([canvas.create_image(
                 467.5,
                 193.5 + (i*46),
                 image=self.entry_img[i]
@@ -113,7 +112,7 @@ class InterfaceElo(Interface):
         y = 0
         for i in range(self.elo.get_games()):
             #Número del jugador
-            self.canvas.create_text(
+            canvas.create_text(
                 54.0 + x,
                 221.0 + (y * 38),
                 anchor="nw",
@@ -124,7 +123,7 @@ class InterfaceElo(Interface):
             #Recuadro para el rating del jugador
             self.entry_img.append(PhotoImage(
                 file=relative_to_assets("images/elo/texto.png")))
-            self.entry.append([self.canvas.create_image(
+            self.entry.append([canvas.create_image(
                 143.0,
                 232.5,
                 image=self.entry_img[i]
