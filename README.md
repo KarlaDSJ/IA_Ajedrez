@@ -22,12 +22,14 @@ ___
    
 2. [**Calculadora de rating (Elo)**](#tarea-2)
 
+3. [**Tarjetero electrónico de posiciones de ajedrez**](#tarea-3)
+
 ___
 
 <a id="tarea-1"></a>
 #### Tarea 1. Programa generador de diagramas de ajedrez <small>[[Top](#tareas)]</small>
 <p align="center">
-  <img src="https://github.com/KarlaDSJ/IA_Ajedrez/blob/Tarea_2/assets/images/chess.png" alt="vistaTarea1"/>
+  <img src="https://github.com/KarlaDSJ/IA_Ajedrez/blob/Tarea_3/assets/images/chess.png" alt="vistaTarea1"/>
 </p>
 
 - Seleccionar la opción jugar
@@ -43,6 +45,7 @@ ___
 - Limpiar tablero: quita todas las piezas del tablero
 - Guardar jugada: guardará el diagrama del tablero de ajedrez, en ese momento, en chess.pdf, el pdf se sobrescribe cada que seleccionamos esta opción
 - Jugar: pondrá en el tablero las piezas en el lugar correspondiente para iniciar una partida
+- Ver jugadas: (tarea 3) nos muestra las jugadas guardadas en la base de datos
 - Icono de home: nos regresa a la página principal
 - Los otros botones por el momento no hacen nada 
 
@@ -50,7 +53,7 @@ ___
 <a id="tarea-2"></a>
 #### Tarea 2. Calculadora de rating (Elo) <small>[[Top](#tareas)]</small>
 <p align="center">
-  <img src="https://github.com/KarlaDSJ/IA_Ajedrez/blob/Tarea_2/assets/images/elo.png" alt="vistaTarea2"/>
+  <img src="https://github.com/KarlaDSJ/IA_Ajedrez/blob/Tarea_3/assets/images/elo.png" alt="vistaTarea2"/>
 </p>
 
 - Seleccionar la opción calcular Elo
@@ -64,3 +67,17 @@ ___
 -  Calcular: muestra en la parte superior derecha el nuevo rating, el promedio del rating de los jugadores y el desempeño
 -  Limpiar: limpia las casillas donde se ingresa la información
 -  Icono de home: nos regresa a la página principal
+
+<a id="tarea-3"></a>
+#### Tarea 3. Tarjetero electrónico de posiciones de ajedrez <small>[[Top](#tareas)]</small>
+<p align="center">
+  <img src="https://github.com/KarlaDSJ/IA_Ajedrez/blob/Tarea_3/assets/images/tarjetero.png" alt="vistaTarea3"/>
+</p>
+
+- La fechas de la parte inferior nos ayudan a movernos entre todas las tarjetas
+- Al dar clik en ver o en agregar se muestra la pantalla del lado derecho, en ella se puede hacer:
+   + Dar click en guardar: actualiza o crea la información de la tarjeta
+   + Dar click en editar: despliega fichas para recrear una jugada en el tablero de ajedrez
+   + Dar click en descargar: crea un pdf con la información de la ficha 
+   + Dar click en  eliminar: borra la tarjeta de la base de datos 
+
