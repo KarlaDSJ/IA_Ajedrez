@@ -1,5 +1,5 @@
 from tkinter import PhotoImage
-from .config import relative_to_assets
+from .config import *
 
 class Interface():
     """
@@ -8,8 +8,7 @@ class Interface():
     Crea una interfaz para que el usuario pueda interactuar
     """
 
-    def __init__(self, canvas, button_info) -> None:
-        self.canvas = canvas
+    def __init__(self, button_info) -> None:
         #Nombres de los botones y la función que harán al dar click
         self.button_name = button_info
         self.buttons = [] # Botones del Inicio
@@ -18,7 +17,7 @@ class Interface():
     def clean(self, all=True):
         """Limpia el canvas"""
         if all:
-            self.canvas.delete('all')
+            canvas.delete('all')
         for i in self.buttons:
             i.destroy()
         self.buttons= [] 
@@ -28,7 +27,7 @@ class Interface():
         """Pone los adornos de la parte superior"""
         self.image_down_img = PhotoImage(
             file=relative_to_assets("images/ola_down.png"))
-        self.image_down = self.canvas.create_image(
+        self.image_down = canvas.create_image(
             385.0,
             552.0,
             image=self.image_down_img
@@ -38,7 +37,7 @@ class Interface():
         """Pone los adornos de la parte inferior"""
         self.image_top_img = PhotoImage(
             file=relative_to_assets("images/ola_top.png"))
-        self.image_top = self.canvas.create_image(
+        self.image_top = canvas.create_image(
             385.0,
             10.0,
             image=self.image_top_img

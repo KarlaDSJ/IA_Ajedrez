@@ -1,8 +1,8 @@
 from src.chess.interfaceChess import InterfaceChess
 from src.elo.interfaceElo import InterfaceElo
-from src.common.config import relative_to_assets
+from src.common.config import *
 from src.common.interface import Interface
-from tkinter import Tk, Canvas, PhotoImage, Button
+from tkinter import PhotoImage, Button
 
 """
     Programa que en un futuro le dará la oportunidad al usuario de jugar    
@@ -17,18 +17,17 @@ class Home(Interface):
     Crea una interfaz para que el usuario pueda interactuar 
     con los diferentes programas (jugar, calcular Elo)
     """
-    def __init__(self, canvas) -> None:
+    def __init__(self) -> None:
         button_info = [("jugar", self.set_game),
                        ("calcular ELO", self.set_elo)]
-        super().__init__(canvas, button_info)
-        self.canvas = canvas 
-        self.interface_chess = InterfaceChess(self.canvas, self.set_home)
-        self.interface_elo = InterfaceElo(self.canvas, self.set_home)
+        super().__init__(button_info)
+        self.interface_chess = InterfaceChess(self.set_home)
+        self.interface_elo = InterfaceElo(self.set_home)
 
     def set_home(self):
         """ Mustra las opciones (jugar o calcular Elo)"""
-        self.canvas.place(x = 0, y = 0) #Rectángulo azul
-        self.canvas.create_rectangle(
+        canvas.place(x = 0, y = 0) #Rectángulo azul
+        canvas.create_rectangle(
             0.0,
             0.0,
             385.0,
@@ -69,22 +68,7 @@ class Home(Interface):
         self.interface_elo.set_buttons()
 
 if __name__ == "__main__":
-    window = Tk()
-    #Define el tamaño de la ventana
-    window.geometry("770x562")
-    window.configure(bg = "#FFFFFF")
-
-    canvas = Canvas(
-        window,
-        bg = "#FFFFFF",
-        height = 562,
-        width = 770,
-        bd = 0,
-        highlightthickness = 0,
-        relief = "ridge"
-    )
-
-    home = Home(canvas)
+    home = Home()
     home.set_home()
 
     window.resizable(False, False)
