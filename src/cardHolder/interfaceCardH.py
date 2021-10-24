@@ -1,8 +1,15 @@
-from tkinter.constants import BOTH, END, LEFT, RIGHT, WORD, Y
+from tkinter.constants import LEFT, WORD
 from .cardHolder import CardHolder
 from src.common.config import *
 from src.common.interface import Interface
-from tkinter import Listbox, messagebox, Text, Scrollbar, PhotoImage, Button, Label
+from tkinter import messagebox, Text, PhotoImage, Button, Label
+#Para generar el pdf
+from src.common.config import * 
+from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus import Paragraph, SimpleDocTemplate
+from reportlab.lib.styles import ParagraphStyle
 
 class InterfaceCardH(Interface):
     """
@@ -14,6 +21,7 @@ class InterfaceCardH(Interface):
     def __init__(self, set_home, board, menu) -> None:
         #Home
         self.set_home = set_home
+        self.id = ["",]
         #Tablero
         self.board = board 
         #Menu
@@ -25,24 +33,62 @@ class InterfaceCardH(Interface):
         self.holder_card = []
         #Para los rectángulos de todas las cartas
         self.rec = []
+        #Número de página para ver las tarjetas
+        self.page = 0
         #Para que el usuario ingrese los valores
         self.entry_img = []
         self.entry = []
         #Img botón ver
         self.look = PhotoImage(
             file=relative_to_assets("images/elo/ver.png"))
+        #Para el PDF
+        font = "assets/fonts/MERIFONT.TTF"
+        pdfmetrics.registerFont(TTFont('ChessMerida', font))
+        self.pdf = SimpleDocTemplate("chessCard.pdf")
         #Botones y su función al dar click
         self.button_info = [("regresar", self.back),
                        ("home", self.go_home),
                        ("guardar", self.save),
                        ("editar", self.set_menu),
                        ("borrar", self.delete),
-                       ("agregar", lambda : self.card_on_click("", True))]
+                       ("descargar", self.pdf_card),
+                       ("regresar", lambda : self.next_card(-5)),
+                       ("agregar", lambda : self.card_on_click("", True)),
+                       ("siguiente", lambda : self.next_card(5))]
         super().__init__(self.button_info)
 
-    def move_to_window(self):
+    def pdf_card(self):
+        tablero = self.board.to_string()
+        board_style = ParagraphStyle(
+            "Board",
+            fontName="ChessMerida",
+            alignment=TA_CENTER,
+            leading=30,
+            fontSize=30
+        )
+        title_style = ParagraphStyle(
+            "Title",
+            fontName="Helvetica",
+            alignment=TA_CENTER,
+            leading=50,
+            fontSize=20
+        )
+        text_style = ParagraphStyle(
+            "Text",
+            fontName="Helvetica",
+            alignment=TA_JUSTIFY,
+            fontSize=12
+        )
+        self.pdf.build([Paragraph(self.cards[self.id[1]][1], title_style),
+                        Paragraph(self.cards[self.id[1]][3], text_style),
+                        Paragraph(tablero, board_style)])
+
+        messagebox.showinfo("Information","Tarjeta guardada en chessCard.pdf")
+
+    def move_to_window(self):   
         """Limpia la ventana y prepara todo para la siguiente"""
         self.clean()
+        self.page = 0
         self.set_footer()
         self.set_header()
         self.default_buttons()
@@ -59,40 +105,54 @@ class InterfaceCardH(Interface):
             480,
             fill="#E5E5E5",
             outline=""))
+        for i in range(3):
+            #Para agregar una o ver más
+            self.buttons[i+6].place(
+                x=150 + (i*200),
+                y=492,
+                width=40 if i != 1 else 85,
+                height=40 if i != 1 else 24,
+            )
+        #Primeras 5
+        self.next_card(5)
 
-        self.rec.append(Scrollbar(window))
-        #self.rec[1].pack(side = RIGHT,fill = Y)
+    def next_card(self, num):
+        """Limpia la página actual y pone las tarjetas
+        correspondientes a la nueva página"""
+        num = self.page + num
+        num = num if len(self.cards) > num else len(self.cards)
+        num = num if num > 0 else 0
+        
+        a = num if num < self.page else self.page
+        b = self.page if num < self.page else num
+        k = 0
+        for i in range(len(self.holder_card)):
+            self.holder_card[i][0].destroy()
+            self.holder_card[i][1].destroy()
+            self.holder_card[i][2].destroy()
 
-        self.buttons[5].place(
-            x=346,
-            y=492,
-            width=84,
-            height=24
-        )
+        for j in range(b-a):
+            self.set_one_card(a+j, k*65)
+            k+=1
+        self.page = b - 1
 
-        #self.rec.append(Listbox(window, 
-            #yscrollcommand = self.rec[1].set))
-
-        for i in range(len(self.cards)):
-            self.set_one_card(i)
-
-        #self.rec[2].pack(side = LEFT, fill = BOTH)
-        #self.rec[1].config(command=self.rec[2].yview)
-
-    def set_one_card(self, i):
+    def set_one_card(self, i, k):
         """Muestra la información de una tarjeta de juego
         i - id de la tarjeta"""
         move = []
+        description = self.cards[i][3]
+        if len(description) > 13:
+            description = self.cards[i][3][0:10]+"..."
         move.append(Label(
-                text=self.cards[i][1],
+                text=str(i)+" "+self.cards[i][1],
                 bg="#E5E5E5",
                 justify=LEFT)) #Título
         move.append(Label(
-            text=self.cards[i][3],
+            text=description,
             bg="#E5E5E5",
             justify=LEFT)) #Descripción
-        move[0].place(x=81, y=175 + (i*65))
-        move[1].place(x=301, y=172 + (i*65))
+        move[0].place(x=81, y=175 + k)
+        move[1].place(x=301, y=172 + k)
         move.append(Button(
                 image=self.look,
                 borderwidth=0,
@@ -102,12 +162,12 @@ class InterfaceCardH(Interface):
         ))
         move[2].place(
             x=602,
-            y=179 + (i*65),
+            y=179 + k,
             width=70.7,
             height=20
         )
         self.holder_card.append(move)
-        #self.rec[2].insert(END,move)
+        
 
     def card_on_click(self,id, new=False):
         """Nos muestra otra vista para editar, guardar, eliminar
@@ -127,11 +187,11 @@ class InterfaceCardH(Interface):
         self.board.set_board_num()
         self.board.set_board_letters()
         if new:
-            self.id = ""
+            self.id = ["",]
             self.set_entry() #Mostramos las tarjeta
             self.board.set_empty_board()
         else:
-            self.id = self.cards[id][0]
+            self.id = [self.cards[id][0],id]
             self.set_entry(self.cards[id][1],self.cards[id][3]) #Mostramos las tarjeta
             self.board.set_board(self.cards[id][2].split())
 
@@ -141,15 +201,15 @@ class InterfaceCardH(Interface):
         tablero = self.board.get_coord()
         titulo = self.entry[0].get(1.0,'end')
         descripcion = self.entry[1].get(1.0,'end')
-        if self.id == "":
+        if self.id[0] == "":
             self.cards = self.card_holder.add_card(titulo, tablero, descripcion)
         else:
-            self.cards = self.card_holder.update_card(self.id,titulo, tablero, descripcion)
+            self.cards = self.card_holder.update_card(self.id[0],titulo, tablero, descripcion)
 
     def delete(self):
         """Borra una tarjeta de la base de datos, no regresa a ver todas las 
         jugadas"""
-        self.cards = self.card_holder.delete_card(self.id) 
+        self.cards = self.card_holder.delete_card(self.id[0]) 
         self.clean()
         self.show_cards()
 
@@ -218,11 +278,11 @@ class InterfaceCardH(Interface):
             )
 
     def set_buttons(self):
-        """Agrega los botones para editar, guardar, eliminar"""
+        """Agrega los botones para editar, guardar, eliminar y descargar"""
         
-        for i in range(3):
+        for i in range(4):
             self.buttons[i+2].place(
-                x=462 + (i*131) if i < 2 else 528,
+                x=462 + (i*131) if i < 2 else 462 + ((i-2)*131),
                 y=422 if i < 2 else 464,
                 width=117.41,
                 height=29.89

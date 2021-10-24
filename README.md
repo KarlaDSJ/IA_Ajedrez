@@ -6,7 +6,10 @@ Profesor - Manuel Cristóbal López Michelone
 git clone https://github.com/KarlaDSJ/IA_Ajedrez.git
 cd IA_Ajedrez
 pip3 install -r requirements.txt
+mysql -u root -p < DDL.sql
 ```
+
+El usuario y contraseña utilizados para acceder a la base de datos pueden modificarse en el archivo src/common/config.py 
 
 ### Ejecución 
 ```
