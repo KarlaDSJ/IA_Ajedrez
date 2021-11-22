@@ -22,7 +22,9 @@ ___
    
 2. [**Calculadora de rating (Elo)**](#tarea-2)
 
-3. [**Tarjetero electrónico de posiciones de ajedrez**](#tarea-3)
+3. [**Tarjetero electrónico de posiciones de ajedrez**](#tarea-3)+
+
+4. [**PGN**](#tarea-4)
 
 ___
 
@@ -81,3 +83,12 @@ ___
    + Dar click en descargar: crea un pdf con la información de la ficha 
    + Dar click en  eliminar: borra la tarjeta de la base de datos 
 
+<a id="tarea-4"></a>
+#### Tarea 4. PGN <small>[[Top](#tareas)]</small>
+<p align="center">
+  <img src="https://github.com/KarlaDSJ/IA_Ajedrez/blob/Tarea_4/assets/images/PGN.png" alt="vistaTarea4"/>
+</p>
+
+- Flechas parte inferior - para moverse entre las tiradas de un juego
+- Flechas parte superior - para moverse entre los juegos del archivo
+- Botón de información - muestra la información de la partida
