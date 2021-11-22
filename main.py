@@ -60,6 +60,8 @@ class Home(Interface):
         self.interface_chess.create_buttons()
         self.interface_chess.set_board()
 
+        canvas.bind('<Button-1>', self.interface_chess.board.set_arrow)
+
     def set_elo(self):
         """Se muestra todo lo necesario para calcular el rating
            de un jugador al seleccionar calcular Elo"""
