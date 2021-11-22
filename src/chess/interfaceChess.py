@@ -1,6 +1,7 @@
 from ..cardHolder.interfaceCardH import InterfaceCardH
 from src.common.config import *
 from .board import Board
+from .pgn import PGN
 from .menu import Menu
 from src.common.interface import Interface
 from tkinter import Text, Button, PhotoImage
@@ -15,6 +16,7 @@ class InterfaceChess(Interface):
     def __init__(self,set_home) -> None:
         self.set_home = set_home #Home
         self.board = Board()
+        self.pgn = PGN(self.board.set_board)
         self.pieces_menu = Menu(self.board)
         self.cards = InterfaceCardH(set_home, self.board, 
                                     self.pieces_menu)
@@ -34,7 +36,8 @@ class InterfaceChess(Interface):
                        ("jugar", self.board.set_initial_board),
                        ("rotar", self.board.rotate), 
                        ("ver", self.show_cards),
-                       ("guardar_historial", self.board.save_play_history)]
+                       ("guardar_historial", self.board.save_play_history),
+                       ("leer_PGN", self.pgn.read_file)]
         super().__init__(button_info)
 
     def show_cards(self):
@@ -79,7 +82,7 @@ class InterfaceChess(Interface):
 
     def create_buttons(self):
         """Crea los botones del menú del juego"""
-        for i in range(8):
+        for i in range(9):
             self.img_buttons.append(PhotoImage(
             file=relative_to_assets("images/chess/"+self.button_name[i][0] + ".png")))
             self.buttons.append(Button(
@@ -89,10 +92,10 @@ class InterfaceChess(Interface):
                 command=self.button_name[i][1],
                 relief="flat"
             ))
-            if i == 7:
+            if i >= 7:
                 self.buttons[i].place(
-                    x=452,
-                    y=479.40289306640625,
+                    x=452 + 160 * (i - 7),
+                    y=479 + 15 * (i - 7),
                     width=124.44107818603516,
                     height=25.540735244750977
                 )

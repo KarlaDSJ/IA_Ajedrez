@@ -1,5 +1,7 @@
+import random
 from .box import Box
-from tkinter import messagebox
+from src.common.config import window
+from tkinter import messagebox, Frame
 #Para generar el pdf
 from src.common.config import * 
 from reportlab.lib.enums import TA_CENTER
@@ -21,10 +23,16 @@ class Board():
     
     def __init__(self) -> None:
         self.board = [] # Tablero compuesto de casillas
-
         #Para el historial de las piezas del tablero
         self.white_pieces = []
         self.black_pieces = []
+
+        self.frame = Frame(canvas)
+        self.frame.place()
+
+        #Para las flechas
+        self.click_num = 0
+        self.x1,self.x2,self.y1,self.y2 = 0,0,0,0
 
         font = "assets/fonts/MERIFONT.TTF"
         pdfmetrics.registerFont(TTFont('ChessMerida', font))
@@ -32,6 +40,26 @@ class Board():
         self.pdf = SimpleDocTemplate("chess.pdf")
 
         self.piece = "" #Pieza que será puesta en el tablero
+
+    def set_arrow(self, event):
+        """Pone líneas entre dos puntos"""
+        if self.click_num == 0:
+            self.x1 = event.x
+            self.y1 = event.y
+            self.click_num = 1
+        else:
+            #Color aleatorio
+            fill="#"+("%06x"%random.randint(0,16777215))
+            self.x2 = event.x
+            self.y2 = event.y
+            self.click_num = 0
+            coord = [self.x2,self.y2+10, self.x2 + 10 ,self.y2, self.x2 - 10,self.y2]
+            tri = canvas.create_polygon(coord, fill=fill, width=5)
+            line = canvas.create_line(self.x1,self.y1,self.x2,self.y2, fill=fill, width=5)
+            canvas.tag_raise(line)
+            canvas.tag_raise(tri)
+            canvas.after(1000, canvas.delete, line)
+            canvas.after(1000, canvas.delete, tri)
 
     def set_piece(self, piece):
         """
