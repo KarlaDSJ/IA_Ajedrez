@@ -1,4 +1,4 @@
-from src.common.config import relative_to_assets
+from src.common.config import * 
 from tkinter import Button, PhotoImage
 from src.common.interface import Interface
 
@@ -16,6 +16,7 @@ class Menu(Interface):
         self.pieces = ["R","D","T","A","C","p"]
         self.is_select = True
         self.is_arrow = False
+        self.arrow = []
         #Img para el menú (flechas, seleccionar, borrar)
         self.menu = [PhotoImage(file=relative_to_assets("images/chess/flecha.png")),
                      PhotoImage(file=relative_to_assets("images/chess/seleccionar.png")),
@@ -24,7 +25,12 @@ class Menu(Interface):
         self.close  =PhotoImage(
             file=relative_to_assets("images/chess/close.png"))
 
+    def add_arrow(self, line):
+        """Agrega la referencia a una flecha"""
+        self.arrow.append(line)
+
     def get_is_arrow(self):
+        """Nos indica si la opción de poner flechas está activa"""
         return self.is_arrow
 
     def do_click(self, id):
@@ -36,8 +42,6 @@ class Menu(Interface):
         """
         if self.is_select:
             self.board.set_piece(id)
-        else:
-            self.board.set_piece("")
 
     def set_pieces(self, y, color):
         """
@@ -67,17 +71,22 @@ class Menu(Interface):
             )
 
     def switch_var(self, val):
-        """Función auxiliar para indicar si una pieza 
-           debe ponerse o quitarse"""
+        """Función auxiliar para indicar si se pone una pieza 
+           o una flecha"""
         if val == 0:
             self.is_arrow = True
+            self.is_select = False
         else:
-            self.is_select = not val - 1
+            self.is_select = True
             self.is_arrow = False
-            print(self.is_select)
-            if not self.is_select:
-                print("Entré")
-                self.do_click(0)
+
+    def delete(self):
+        """Borra una pieza o flecha del tablero"""
+        if self.is_select:
+            self.board.set_piece("")
+        elif len(self.arrow) > 0:
+            x = self.arrow.pop()
+            canvas.delete(x)
 
     def set_menu(self):
         """Muestra un menú para la fichas blancas y 
@@ -88,12 +97,14 @@ class Menu(Interface):
         self.set_pieces(479.0, "B") #Piezas blancas
 
         for i in range(3):
+
+            menu_set = lambda x = i: self.switch_var(x)
             #Botón para agregar/borrar una pieza
             self.buttons.append(Button(
                 image=self.menu[i],
                 borderwidth=0,
                 highlightthickness=0,
-                command=lambda x = i: self.switch_var(x),
+                command= self.delete if i == 2 else menu_set,
                 relief="flat"
             ))
 

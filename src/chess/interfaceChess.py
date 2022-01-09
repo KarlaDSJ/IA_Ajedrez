@@ -48,7 +48,9 @@ class InterfaceChess(Interface):
         #Evento que sólo funciona dentro de las coordenadas del tablero
         if event.x > 60 and event.x < 400 and event.y > 110 and event.y < 469:
             if self.pieces_menu.get_is_arrow():#Si la opción de flechas está activa
-                self.board.set_arrow(event)
+                line = self.board.set_arrow(event)
+                if line is not None:
+                    self.pieces_menu.add_arrow(line)
             else:
                 #Obtenemos el número de casilla dada la coordenada
                 id = self.board.get_num(event.x, event.y)

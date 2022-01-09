@@ -1,8 +1,7 @@
 import random
 from tkinter.constants import LAST
 from .box import Box
-from src.common.config import window
-from tkinter import Misc, messagebox, Frame
+from tkinter import messagebox, Frame
 #Para generar el pdf
 from src.common.config import * 
 from reportlab.lib.enums import TA_CENTER
@@ -61,7 +60,7 @@ class Board():
             self.click_num = 0
             line = canvas.create_line(self.x1,self.y1,self.x2,self.y2, fill=fill, width=5, arrow=LAST)
             canvas.tag_raise(line)
-            #canvas.after(1000, canvas.delete, line)
+            return line
 
     def set_piece(self, piece):
         """
