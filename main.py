@@ -2,7 +2,7 @@ from src.chess.interfaceChess import InterfaceChess
 from src.elo.interfaceElo import InterfaceElo
 from src.common.config import *
 from src.common.interface import Interface
-from tkinter import PhotoImage, Button
+from tkinter import Label, PhotoImage, Button
 
 """
     Programa que en un futuro le dará la oportunidad al usuario de jugar    
@@ -25,7 +25,7 @@ class Home(Interface):
         self.interface_elo = InterfaceElo(self.set_home)
 
     def set_home(self):
-        """ Mustra las opciones (jugar o calcular Elo)"""
+        """ Muestra las opciones (jugar o calcular Elo)"""
         canvas.place(x = 0, y = 0) #Rectángulo azul
         canvas.create_rectangle(
             0.0,
@@ -58,9 +58,8 @@ class Home(Interface):
         self.interface_chess.set_ornaments()
         self.interface_chess.set_play_history()
         self.interface_chess.create_buttons()
+        canvas.bind('<Button-1>', self.interface_chess.click)
         self.interface_chess.set_board()
-
-        canvas.bind('<Button-1>', self.interface_chess.board.set_arrow)
 
     def set_elo(self):
         """Se muestra todo lo necesario para calcular el rating
@@ -75,3 +74,6 @@ if __name__ == "__main__":
 
     window.resizable(False, False)
     window.mainloop()
+
+#https://pythonguides.com/python-tkinter-animation/
+#https://stackoverflow.com/questions/34022715/how-to-make-tkinter-canvas-text-variable-in-function

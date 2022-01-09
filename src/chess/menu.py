@@ -15,18 +15,17 @@ class Menu(Interface):
         self.board = board
         self.pieces = ["R","D","T","A","C","p"]
         self.is_select = True
-        #Img para seleccionar una pieza
-        self.new_move =PhotoImage(
-            file=relative_to_assets("images/chess/agregar.png"))
-        #Img para seleccionar una pieza
-        self.select_piece =PhotoImage(
-            file=relative_to_assets("images/chess/seleccionar.png"))
-        #Img para borrar una pieza
-        self.delete_piece  =PhotoImage(
-            file=relative_to_assets("images/chess/borrar.png"))
+        self.is_arrow = False
+        #Img para el menú (flechas, seleccionar, borrar)
+        self.menu = [PhotoImage(file=relative_to_assets("images/chess/flecha.png")),
+                     PhotoImage(file=relative_to_assets("images/chess/seleccionar.png")),
+                     PhotoImage(file=relative_to_assets("images/chess/borrar.png"))]
         #Img para cerrar el menú
         self.close  =PhotoImage(
             file=relative_to_assets("images/chess/close.png"))
+
+    def get_is_arrow(self):
+        return self.is_arrow
 
     def do_click(self, id):
         """
@@ -70,9 +69,15 @@ class Menu(Interface):
     def switch_var(self, val):
         """Función auxiliar para indicar si una pieza 
            debe ponerse o quitarse"""
-        self.is_select = val
-        if not self.is_select:
-            self.do_click(0)
+        if val == 0:
+            self.is_arrow = True
+        else:
+            self.is_select = not val - 1
+            self.is_arrow = False
+            print(self.is_select)
+            if not self.is_select:
+                print("Entré")
+                self.do_click(0)
 
     def set_menu(self):
         """Muestra un menú para la fichas blancas y 
@@ -82,23 +87,21 @@ class Menu(Interface):
         self.set_pieces(43.0, "N") #Piezas negras
         self.set_pieces(479.0, "B") #Piezas blancas
 
-        aux = False
-        for i in range(2):
+        for i in range(3):
             #Botón para agregar/borrar una pieza
-            aux = not aux
             self.buttons.append(Button(
-                image=self.select_piece if i == 0 else self.delete_piece,
+                image=self.menu[i],
                 borderwidth=0,
                 highlightthickness=0,
-                command=lambda x = aux: self.switch_var(x),
+                command=lambda x = i: self.switch_var(x),
                 relief="flat"
             ))
 
             self.buttons[12 + i].place(
-                x=432.0 + (i * 55),
-                y=43.0 + (i*2),
-                width=50.0 - (i*10),
-                height=50.0 - (i*10)
+                x=377.0 + (i * 55),
+                y=43.0 if i != 1 else 40,
+                width=40.0 if i != 1 else 50,
+                height=40.0 if i != 1 else 50
             )
 
         #Botón para cerrar el menú
@@ -110,7 +113,7 @@ class Menu(Interface):
             relief="flat"
         ))
 
-        self.buttons[14].place(
+        self.buttons[15].place(
             x=542.0,
             y=45,
             width=40.0,

@@ -10,7 +10,7 @@ La conexión con la base de datos
 """
 
 db = pymysql.connect(host='localhost',
-        user='root', 
+        user='localhost', 
         password = "pruebatest",
         db='ChessCard',)
 
