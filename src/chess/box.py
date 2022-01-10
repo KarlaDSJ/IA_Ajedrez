@@ -18,7 +18,7 @@ class Box():
         C - Caballo
         p - Peón 
     """
-    def __init__(self, x, y, back, on_clik) -> None:
+    def __init__(self, x, y, back) -> None:
         self.canvas_box = 0 #componente dentro del canvas
         self.img_box = 0 # Imagen de la casilla
         #Coordenadas
@@ -29,8 +29,6 @@ class Box():
         self.color = ""  # B - blanco, N - negro(color)
         #Color
         self.back = back # 0 - blanco, 1 - negro (fondo)
-        #función a realizar al dar click en la casilla
-        self.on_click = on_clik 
         #Agregamos la fuente 
         self.chessMerida = tkFont.Font(family='Chess Merida', size=25, weight='bold')
 

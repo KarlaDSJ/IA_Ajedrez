@@ -152,7 +152,7 @@ class Board():
             for y in range(8):
                 if len(self.board) < 64:
                     #Si el tablero ya contiene todas las casillas
-                    box = Box(x, y, num * 1, self.put_piece)
+                    box = Box(x, y, num * 1)
                     box.set_image()
                     box.show_on_screen()
                     self.board.append(box)
@@ -175,7 +175,7 @@ class Board():
                 color = piece[-1]
                 if len(self.board) < 64:
                     #Si el tablero no contiene todas las casillas
-                    box = Box(x, y, color, self.put_piece)
+                    box = Box(x, y, color)
                     box.set_image()
                     box.show_on_screen()
                     self.board.append(box)
@@ -191,7 +191,7 @@ class Board():
         string = ""
         for x in range(8):
             for y in range(8):
-                string += self.board[(8*x)+y].get_name() + " "
+                string += self.board[(8*x)+y].get_name()+ str(self.board[(8*x)+y].back) + " "
         return string
 
 
