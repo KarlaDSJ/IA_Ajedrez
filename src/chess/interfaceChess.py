@@ -52,9 +52,12 @@ class InterfaceChess(Interface):
                 if line is not None:
                     self.pieces_menu.add_arrow(line)
             else:
-                #Obtenemos el número de casilla dada la coordenada
                 id = self.board.get_num(event.x, event.y)
-                self.board.put_piece(id)#Ponemos la pieza
+                if self.pieces_menu.get_is_menu():#Si el menú está activo
+                    #Obtenemos el número de casilla dada la coordenada
+                    self.board.put_piece(id)#Ponemos la pieza
+                else:
+                    self.board.move(id)
         else:
             self.board.click_num = 0
             

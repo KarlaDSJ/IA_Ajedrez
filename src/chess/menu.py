@@ -1,3 +1,4 @@
+import re
 from src.common.config import * 
 from tkinter import Button, PhotoImage
 from src.common.interface import Interface
@@ -16,14 +17,19 @@ class Menu(Interface):
         self.pieces = ["R","D","T","A","C","p"]
         self.is_select = True
         self.is_arrow = False
+        self.menu = False
         self.arrow = []
         #Img para el menú (flechas, seleccionar, borrar)
-        self.menu = [PhotoImage(file=relative_to_assets("images/chess/flecha.png")),
+        self.menu_button = [PhotoImage(file=relative_to_assets("images/chess/flecha.png")),
                      PhotoImage(file=relative_to_assets("images/chess/seleccionar.png")),
                      PhotoImage(file=relative_to_assets("images/chess/borrar.png"))]
         #Img para cerrar el menú
         self.close  =PhotoImage(
             file=relative_to_assets("images/chess/close.png"))
+
+    def get_is_menu(self):
+        """Nos indica si el menu está activo"""
+        return self.menu
 
     def add_arrow(self, line):
         """Agrega la referencia a una flecha"""
@@ -93,6 +99,8 @@ class Menu(Interface):
         otro para las negras que permite agregar o 
         eliminar piezas"""
 
+        self.menu = True
+
         self.set_pieces(43.0, "N") #Piezas negras
         self.set_pieces(479.0, "B") #Piezas blancas
 
@@ -101,7 +109,7 @@ class Menu(Interface):
             menu_set = lambda x = i: self.switch_var(x)
             #Botón para agregar/borrar una pieza
             self.buttons.append(Button(
-                image=self.menu[i],
+                image=self.menu_button[i],
                 borderwidth=0,
                 highlightthickness=0,
                 command= self.delete if i == 2 else menu_set,
@@ -134,4 +142,7 @@ class Menu(Interface):
     def clean(self):
         """Eliminamos el menu"""
         super().clean(False)
+        self.is_select = True
+        self.is_arrow = False
+        self.menu = False
         self.board.set_piece("")

@@ -1,7 +1,8 @@
 import random
-from tkinter.constants import LAST
+from tkinter.constants import LAST, X
 from .box import Box
 from tkinter import messagebox, Frame
+import time
 #Para generar el pdf
 from src.common.config import * 
 from reportlab.lib.enums import TA_CENTER
@@ -34,6 +35,10 @@ class Board():
         self.click_num = 0
         self.x1,self.x2,self.y1,self.y2 = 0,0,0,0
 
+        #Para mover las piezas
+        self.id_num = 0
+        self.id1,self.id2 = 0,0
+
         font = "assets/fonts/MERIFONT.TTF"
         pdfmetrics.registerFont(TTFont('ChessMerida', font))
 
@@ -42,12 +47,44 @@ class Board():
         self.piece = "" #Pieza que será puesta en el tablero
 
     def get_num(self, x, y):
+        """Regresa el número de la casilla dadas las coordenadas"""
         x = (x - 60) // 43
         y = (y - 110) // 43
         return (8*y)+x
 
+    def move(self,id):
+        """Mueve una pieza en el tablero"""
+        if self.id_num == 0:
+            self.id1 = id
+            self.id_num = 1
+        else:
+            self.id2 = id
+            self.id_num = 0
+            name = self.board[self.id1].get_name()
+            #Que la primer casilla tenga una pieza y la segunda esté vacía
+            if len(name) != 0 and len(self.board[self.id2].get_name()) == 0:
+                x,y = self.board[self.id1].x, self.board[self.id1].y
+                string = self.board[self.id1].toString()
+                while True:
+                    if x == self.board[self.id2].x and y == self.board[self.id2].y:
+                        self.board[self.id1].set_piece("", "") #Quitamos pieza 
+                        self.board[self.id2].set_piece(name[0], name[1]) #Img final 
+                        break #Si llegamos a la casilla meta
+                    #Movemos las coordenadas
+                    piece =  canvas.create_text(x, y, text=string, fill="black", font=('Carlito 25 bold'))
+                    if x != self.board[self.id2].x : 
+                        x = x + 1 if x < self.board[self.id2].x else x - 1
+                    if y != self.board[self.id2].y:
+                        y = y + 1 if y < self.board[self.id2].y else y - 1
+                    
+                    #Para la animación
+                    canvas.tag_raise(piece)
+                    canvas.after(70, canvas.delete, piece)
+                    time.sleep(0.0001)
+                
+
     def set_arrow(self, event):
-        """Pone líneas entre dos puntos"""
+        """Pone una flecha dadas dos coordenadas"""
         if self.click_num == 0:
             self.x1 = event.x
             self.y1 = event.y
@@ -194,7 +231,8 @@ class Board():
         for x in range(8):
             string += ""
             for y in range(8):
-                string += pieces_font[self.board[(8*x)+y].get_name()]
+                box = self.board[(8*x)+y]
+                string += pieces_font[box.get_name()+ str(box.back)]
             string += " <br />"
         string += "<br />"
         return string
