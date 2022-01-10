@@ -22,10 +22,13 @@ ___
    
 2. [**Calculadora de rating (Elo)**](#tarea-2)
 
-3. [**Tarjetero electrónico de posiciones de ajedrez**](#tarea-3)+
+3. [**Tarjetero electrónico de posiciones de ajedrez**](#tarea-3)
 
 4. [**PGN**](#tarea-4)
 
+5. [**Flechas**](#tarea-4)
+
+6. [**Animación al mover las piezas**](#tarea-6)
 ___
 
 <a id="tarea-1"></a>
@@ -86,9 +89,42 @@ ___
 <a id="tarea-4"></a>
 #### Tarea 4. PGN <small>[[Top](#tareas)]</small>
 <p align="center">
-  <img src="https://github.com/KarlaDSJ/IA_Ajedrez/blob/Tarea_4/assets/images/PGN.png" alt="vistaTarea4"/>
+  <img src="https://github.com/KarlaDSJ/IA_Ajedrez/blob/Tarea5/assets/images/PGN.png" alt="vistaTarea4"/>
 </p>
 
 - Flechas parte inferior - para moverse entre las tiradas de un juego
 - Flechas parte superior - para moverse entre los juegos del archivo
 - Botón de información - muestra la información de la partida
+
+<a id="tarea-5"></a>
+#### Tarea 5. Flechas <small>[[Top](#tareas)]</small>
+<p align="center">
+   <p align="center">
+  <img src="https://github.com/KarlaDSJ/IA_Ajedrez/blob/Tarea5/assets/images/Flechas.png" alt="vistaTarea4"/>
+</p>
+
+Para poner las flechas es necesario dar click en Recrear jugada que despliega el menú con las piezas y 4 botones del lado superior derecho, la dinámica cambió un poco desde la primera tarea.
+
+- Para poner una pieza en el tablero  dar click en:
+   + El botón de la mano
+   + La pieza deseada
+   + La casilla del tablero en donde se colocará la pieza
+- Para poner una flecha dar click en:
+   + El botón de la flecha
+   + La casilla donde iniciará la flecha
+   + La casilla donde finalizará la flecha
+- Para borrar una pieza dar click en:
+   + El botón de la mano
+   + El botón de bote de basura
+   + La casilla en la cual deseamos quitar la pieza
+- Para borrar una flecha dar click en:
+   + El botón de la flecha
+   + El botón de bote de basura (se irán eliminando las flechas de la más reciente a la más antigua)
+- Para cerrar el menú con las piezas dar click en el botón con un tache azul
+
+   
+<a id="tarea-6"></a>
+#### Tarea 6. Animación al mover las piezas <small>[[Top](#tareas)]</small>
+<p align="center">
+
+ La animación sólo se aprecia en la pantalla inicial del juego, al dar click en jugar se mostrarán las piezas acomodadas para el inicio de una partida, es aquí cuando podemos dar click en una pieza y posteriormente click en una casilla vacía y veremos como la pieza se desplaza.

@@ -1,5 +1,6 @@
 from src.common.config import *
-from tkinter import PhotoImage, Button
+from tkinter import Label, PhotoImage, Button
+import tkinter as tk, tkinter.font as tkFont
 
 class Box():
     """
@@ -17,44 +18,34 @@ class Box():
         C - Caballo
         p - Peón 
     """
-    def __init__(self, x, y, back, on_clik) -> None:
+    def __init__(self, x, y, back) -> None:
         self.canvas_box = 0 #componente dentro del canvas
         self.img_box = 0 # Imagen de la casilla
         #Coordenadas
-        self.x = x #num que representa las letras (a-h)
-        self.y = y #números (0-7)
+        self.x = 80 + (43 * y) #num que representa las letras (a-h)
+        self.y = 125.0 + (43 * x) #números (0-7)
         #Pieza de la casilla
         self.name = "" #Nombre(inicial)
         self.color = ""  # B - blanco, N - negro(color)
         #Color
         self.back = back # 0 - blanco, 1 - negro (fondo)
-        #función a realizar al dar click en la casilla
-        self.on_click = on_clik 
+        #Agregamos la fuente 
+        self.chessMerida = tkFont.Font(family='Chess Merida', size=25, weight='bold')
 
     def set_image(self):
         """ 
             Asigna la img correspondiente según la silla
             y la pieza que contiene
         """
-        piece = self.name+self.color+str(self.back)
+        piece = str(self.back)
         self.img_box = PhotoImage(
             file=relative_to_assets("images/chess/"+piece+".png"))
 
     def show_on_screen(self):
         """ Muestra en pantalla la casilla """
-        self.canvas_box =  Button(
-                                image=self.img_box,
-                                borderwidth=0,
-                                highlightthickness=0,
-                                command= lambda id = (8*self.x)+self.y: self.on_click(id),
-                                relief="flat"
-                            )
-        self.canvas_box.place(
-            x=57 + (43 * self.y),
-            y=105.0 + (43 * self.x),
-            width=43.0,
-            height=43.0
-        )
+        self.canvas_box_img = canvas.create_image(self.x, self.y, image = self.img_box)
+        self.canvas_box =  canvas.create_text(self.x, self.y, text=self.toString(), fill="black", font=('Carlito 25 bold'))
+
 
     def set_piece(self, name, color):
         """
@@ -65,17 +56,32 @@ class Box():
         self.name = name
         self.color = color
         self.set_image()
-        self.canvas_box.configure(image=self.img_box)
+        self.clean()
+        self.show_on_screen()
     
+    def toString(self):
+        """
+        Convierte el nombre de las piezas en el símbolo de la pieza
+        """
+        pieces_font = {"":"",
+            "RB":"\u2654", "RN":"\u265A",
+            "DB":"\u2655", "DN":"\u265B",        
+            "TB":"\u2656", "TN":"\u265C",
+            "AB":"\u2657", "AN":"\u265D",
+            "CB":"\u2658", "CN":"\u265E",
+            "pB":"\u2659", "pN":"\u265F",   
+        }
+        return pieces_font[self.get_name()]
+
     def get_name(self) -> str:
-        """Nos regresa la información de la casilla:
-           > Color de fondo
+        """
+        Nos regresa la información de la casilla:
+           > Nombre de la pieza
            > Color de la pieza
-           > Inicial de la pieza"""
-        return self.name+self.color+str(self.back)
+        """
+        return self.name+self.color
     
     def clean(self):
         """Eliminamos la casilla del tablero"""
-        self.canvas_box.destroy()
-        self.canvas_box = 0
-        self.img_box = 0
+        canvas.delete(self.canvas_box)
+        canvas.delete(self.canvas_box_img)

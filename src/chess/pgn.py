@@ -49,6 +49,7 @@ class PGN():
         """Si es posible regresamos una tirada"""
         if self.index-1 >= 0:
             self.index -= 1
+            self.board.pop()
             self.board_set_board(self.parse())
 
     def read_file(self):

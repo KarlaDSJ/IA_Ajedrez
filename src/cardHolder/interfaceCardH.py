@@ -1,6 +1,5 @@
 from tkinter.constants import LEFT, WORD
 from .cardHolder import CardHolder
-from src.common.config import *
 from src.common.interface import Interface
 from tkinter import messagebox, Text, PhotoImage, Button, Label
 #Para generar el pdf

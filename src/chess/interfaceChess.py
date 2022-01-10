@@ -40,6 +40,27 @@ class InterfaceChess(Interface):
                        ("leer_PGN", self.pgn.read_file)]
         super().__init__(button_info)
 
+    def click(self, event):
+        """
+        Evento de click en el tablero de ajedrez
+        Permite poner flechas y mover piezas en el tablero
+        """
+        #Evento que sólo funciona dentro de las coordenadas del tablero
+        if event.x > 60 and event.x < 400 and event.y > 110 and event.y < 469:
+            if self.pieces_menu.get_is_arrow():#Si la opción de flechas está activa
+                line = self.board.set_arrow(event)
+                if line is not None:
+                    self.pieces_menu.add_arrow(line)
+            else:
+                id = self.board.get_num(event.x, event.y)
+                if self.pieces_menu.get_is_menu():#Si el menú está activo
+                    #Obtenemos el número de casilla dada la coordenada
+                    self.board.put_piece(id)#Ponemos la pieza
+                else:
+                    self.board.move(id)
+        else:
+            self.board.click_num = 0
+            
     def show_cards(self):
         """Elimina lo botones y el historial de jugadas 
         muestra las tarjetas"""
