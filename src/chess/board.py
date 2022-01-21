@@ -162,9 +162,6 @@ class Board():
                 num = not num
             num = not num
 
-    def rotate(self):
-        print("Tablero rotado")
-
     def set_board(self, pieces):
         """Muestra un tablero con ciertas piezas
         pieces - arreglo que contiene el nombre de las img 
