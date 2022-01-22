@@ -24,9 +24,11 @@ class Pattern():
     Busca un patrón dentro de una jugada de ajedrez
     """
     
-    def __init__(self, games) -> None:
+    def __init__(self, games, board_set_board, parse) -> None:
         self.patterns = []
         self.games = games
+        self.board_set_board = board_set_board
+        self.parse = parse
 
 
     def read_file(self):
@@ -52,15 +54,58 @@ class Pattern():
             lineas = pattern.readlines()
             for i in lineas:
                 self.patterns.append(i[0:-1].split(", "))
-            self.search_pattern()
+            boards, games = self.search_pattern()
+            if len(boards) > 0:
+                self.board_set_board(self.parse(boards[0]))
+                cadena = " ,".join(map(str,games))
+                messagebox.showinfo("Information", "Pantrón encontrado en los juegos: [" + cadena + "]")
+                for i in range(len(boards)):
+                    print("Pantrón encontrado en el juego ", games[i])
+                    print(boards[i])
+            else:
+                messagebox.showerror("Error","Patrón no encontrado")
         except IOError:
             messagebox.showerror("Error","Archivo no encontrado")
     
+    def check_piece(self, val, p_search, p):
+        """
+        Verifica que la pieza de una casilla sea igual a la que
+        buscamos
+        :param val: 
+        :param p_search: Pieza que está en la casilla del tablero
+        :param p: pieza para comparar
+        """
+        if p_search is not None:
+            val += p_search.piece_type == p
+            val = boolean(val)
+        else:
+            val = False
+        return val
+
+    def attack_by(self, val, i, board):
+        """
+        Comprueba que una pieza sea atacada como lo indica el patrón
+        :param i: cadena con la información del patrón
+        :param board: tablero de ajedrez
+        """
+        squares = i.split("(")
+        square = chess.parse_square(squares[1][:-1]) 
+        color = squares[0].isupper()
+        attackers = board.attackers(color, square)
+        for a in attackers:
+            val = self.check_piece(val, board.piece_at(a), squares[0])
+            if not val: return val
+        return True
+
     def search_pattern(self):
         """
         Función que busca los patrones en un juego
         :param game: juego de ajedrez 
         """
+        val = True
+        game_pattern = []
+        game_num = []
+  
         for j in range(len(self.games)):
             print("juego: ", j)
             game = self.games[j].mainline_moves()
@@ -71,21 +116,15 @@ class Pattern():
                     val = True
                     for i in pattern:
                         if i.find("(") != -1:
-                            print("m")
+                            val = self.attack_by(val, i, board)
+                            if not val: break
                         else:
-                            square = chess.parse_square(i[1:]) 
-                            piece = board.piece_at(square)
-                            print("Pieza tablero: ",piece, "pieza: ", i[0])
-                            print(board)
-                            if piece is not None:
-                                val += piece.piece_type == i[0]
-                                val = boolean(val)
-                            else:
-                                val = False
-                                break
-                    print(val)
+                            square = chess.parse_square(i[1:])
+                            val = self.check_piece(val, board.piece_at(square), i[0])
+                            if not val: break
                     if val:
-                        print("Pantrón encontrado, juego: ", j)
-                        return True
+                        game_pattern.append(board)
+                        game_num.append(j)
+                        break
                     board.push(move)
-
+        return game_pattern, game_num

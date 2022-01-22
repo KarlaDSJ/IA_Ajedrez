@@ -44,14 +44,14 @@ class PGN():
         if self.index+1 < len(list(self.game)):
             self.board.push(list(self.game)[self.index])
             self.index += 1
-            self.board_set_board(self.parse())
+            self.board_set_board(self.parse(self.board))
 
     def get_back(self):
         """Si es posible regresamos una tirada"""
         if self.index-1 >= 0:
             self.index -= 1
             self.board.pop()
-            self.board_set_board(self.parse())
+            self.board_set_board(self.parse(self.board))
 
     def read_file(self, is_pattern):
         """Crea una nueva ventana para que el usuario ingrese 
@@ -74,7 +74,7 @@ class PGN():
             self.board.push(move)
         self.moves = self.board.fullmove_number
         self.index = len(list(self.game))
-        self.board_set_board(self.parse())
+        self.board_set_board(self.parse(self.board))
 
     def get_games(self, name, is_pattern):
         """ Obtiene los juegos de un archivo PGN y 
@@ -92,15 +92,16 @@ class PGN():
                     break
 
             if is_pattern:
-                self.pattern = Pattern(self.games) #Archivo con el patrón
+                self.pattern = Pattern(self.games, self.board_set_board, self.parse) #Archivo con el patrón
                 self.pattern.read_file()
-            self.move_last(0)
-            self.show_buttons()
+            else:
+                self.move_last(0)
+                self.show_buttons()
 
         except IOError:
             messagebox.showerror("Error","Archivo no encontrado")
 
-    def parse(self):
+    def parse(self, board):
         match = {
             'r' : 'TN',
             'n' : 'CN' ,
@@ -116,7 +117,7 @@ class PGN():
             'P' : 'pB',
             '.' : ''
         }
-        string = self.board.__str__().split()
+        string = board.__str__().split()
         num = 0
         for x in range(8):
             for y in range(8):
