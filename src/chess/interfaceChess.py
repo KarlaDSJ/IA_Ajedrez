@@ -34,10 +34,10 @@ class InterfaceChess(Interface):
                        ("limpiar", self.board.set_empty_board), 
                        ("guardar_jugada", self.board.save), 
                        ("jugar", self.board.set_initial_board),
-                       ("rotar", self.board.rotate), 
+                       ("buscar", lambda x = True: self.pgn.read_file(x)), 
                        ("ver", self.show_cards),
                        ("guardar_historial", self.board.save_play_history),
-                       ("leer_PGN", self.pgn.read_file)]
+                       ("leer_PGN", lambda x = False: self.pgn.read_file(x))]
         super().__init__(button_info)
 
     def click(self, event):
