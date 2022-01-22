@@ -29,6 +29,8 @@ ___
 5. [**Flechas**](#tarea-4)
 
 6. [**Animación al mover las piezas**](#tarea-6)
+
+7. [**Búsqueda de Patrones**](#tarea-7)
 ___
 
 <a id="tarea-1"></a>
@@ -128,3 +130,12 @@ Para poner las flechas es necesario dar click en Recrear jugada que despliega el
 <p align="center">
 
  La animación sólo se aprecia en la pantalla inicial del juego, al dar click en jugar se mostrarán las piezas acomodadas para el inicio de una partida, es aquí cuando podemos dar click en una pieza y posteriormente click en una casilla vacía y veremos como la pieza se desplaza.
+   
+<a id="tarea-7"></a>
+#### Tarea 7. Búsqueda de Patrones <small>[[Top](#tareas)]</small>
+<p align="center">
+<p align="center">
+  <img src="https://github.com/KarlaDSJ/IA_Ajedrez/blob/Tarea_7/assets/images/Patrones.png" alt="vistaTarea7"/>
+</p>
+
+Es necesario dar click en el botón de “Buscar Patrón”, una vez hecho esto se solicitara la ruta del archivo PGN en el cual estarán las partidas para buscar el patrón, además de la ruta del archivo donde se encuentran los patrones a buscar. Se procede a la búsqueda y una vez finalizada nos indica en qué juegos se encontraron los patrones.
